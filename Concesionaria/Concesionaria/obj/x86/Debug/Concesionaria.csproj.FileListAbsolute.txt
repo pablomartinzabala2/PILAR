@@ -395,3 +395,6 @@ F:\PROGRAMACION\COMERCIAL\AG\Concesionaria\Concesionaria\obj\x86\Debug\RdlCompil
 F:\PROGRAMACION\COMERCIAL\AG\Concesionaria\Concesionaria\obj\x86\Debug\RdlCompile.compiled
 F:\PROGRAMACION\COMERCIAL\AG\Concesionaria\Concesionaria\obj\x86\Debug\Concesionaria.FrmVerCliente.resources
 F:\PROGRAMACION\COMERCIAL\AG\Concesionaria\Concesionaria\obj\x86\Debug\Concesionaria.csprojResolveAssemblyReference.cache
+F:\PROGRAMACION 2\PILAR\PILAR\Concesionaria\Concesionaria\bin\Debug\Concesionaria.exe.config
+F:\PROGRAMACION 2\PILAR\PILAR\Concesionaria\Concesionaria\obj\x86\Debug\Concesionaria.exe
+F:\PROGRAMACION 2\PILAR\PILAR\Concesionaria\Concesionaria\obj\x86\Debug\Concesionaria.pdb

@@ -182,6 +182,11 @@
             this.txtTotalGasto = new System.Windows.Forms.TextBox();
             this.label44 = new System.Windows.Forms.Label();
             this.chkSinRegistrarCliente = new System.Windows.Forms.CheckBox();
+            this.txtFechaEfectivoPagar = new System.Windows.Forms.MaskedTextBox();
+            this.label45 = new System.Windows.Forms.Label();
+            this.btnQuitarEfectivoPagar = new System.Windows.Forms.Button();
+            this.btnAgregarEfectivoPagar = new System.Windows.Forms.Button();
+            this.GrillaEfectivoPagar = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GrillaCliente)).BeginInit();
@@ -202,6 +207,7 @@
             this.Efectivo.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GrillaEfectivoPagar)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -1609,6 +1615,11 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.tabPage2.Controls.Add(this.GrillaEfectivoPagar);
+            this.tabPage2.Controls.Add(this.btnQuitarEfectivoPagar);
+            this.tabPage2.Controls.Add(this.btnAgregarEfectivoPagar);
+            this.tabPage2.Controls.Add(this.txtFechaEfectivoPagar);
+            this.tabPage2.Controls.Add(this.label45);
             this.tabPage2.Controls.Add(this.txtEfectivoaPagar);
             this.tabPage2.Controls.Add(this.label32);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
@@ -1624,7 +1635,7 @@
             this.txtEfectivoaPagar.Location = new System.Drawing.Point(92, 27);
             this.txtEfectivoaPagar.Name = "txtEfectivoaPagar";
             this.txtEfectivoaPagar.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtEfectivoaPagar.Size = new System.Drawing.Size(246, 23);
+            this.txtEfectivoaPagar.Size = new System.Drawing.Size(220, 23);
             this.txtEfectivoaPagar.TabIndex = 48;
             this.txtEfectivoaPagar.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtEfectivoaPagar_KeyPress);
             this.txtEfectivoaPagar.Leave += new System.EventHandler(this.txtEfectivoaPagar_Leave);
@@ -1768,6 +1779,54 @@
             this.chkSinRegistrarCliente.Text = "Sin Registrar Cliente";
             this.chkSinRegistrarCliente.UseVisualStyleBackColor = true;
             // 
+            // txtFechaEfectivoPagar
+            // 
+            this.txtFechaEfectivoPagar.Location = new System.Drawing.Point(458, 29);
+            this.txtFechaEfectivoPagar.Mask = "00/00/0000";
+            this.txtFechaEfectivoPagar.Name = "txtFechaEfectivoPagar";
+            this.txtFechaEfectivoPagar.Size = new System.Drawing.Size(76, 23);
+            this.txtFechaEfectivoPagar.TabIndex = 50;
+            this.txtFechaEfectivoPagar.ValidatingType = typeof(System.DateTime);
+            // 
+            // label45
+            // 
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(324, 33);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(128, 17);
+            this.label45.TabIndex = 49;
+            this.label45.Text = "Fecha Vencimiento";
+            // 
+            // btnQuitarEfectivoPagar
+            // 
+            this.btnQuitarEfectivoPagar.Image = ((System.Drawing.Image)(resources.GetObject("btnQuitarEfectivoPagar.Image")));
+            this.btnQuitarEfectivoPagar.Location = new System.Drawing.Point(598, 24);
+            this.btnQuitarEfectivoPagar.Name = "btnQuitarEfectivoPagar";
+            this.btnQuitarEfectivoPagar.Size = new System.Drawing.Size(40, 28);
+            this.btnQuitarEfectivoPagar.TabIndex = 58;
+            this.btnQuitarEfectivoPagar.UseVisualStyleBackColor = true;
+            this.btnQuitarEfectivoPagar.Click += new System.EventHandler(this.btnQuitarEfectivoPagar_Click);
+            // 
+            // btnAgregarEfectivoPagar
+            // 
+            this.btnAgregarEfectivoPagar.Image = ((System.Drawing.Image)(resources.GetObject("btnAgregarEfectivoPagar.Image")));
+            this.btnAgregarEfectivoPagar.Location = new System.Drawing.Point(550, 24);
+            this.btnAgregarEfectivoPagar.Name = "btnAgregarEfectivoPagar";
+            this.btnAgregarEfectivoPagar.Size = new System.Drawing.Size(40, 28);
+            this.btnAgregarEfectivoPagar.TabIndex = 57;
+            this.btnAgregarEfectivoPagar.UseVisualStyleBackColor = true;
+            this.btnAgregarEfectivoPagar.Click += new System.EventHandler(this.btnAgregarEfectivoPagar_Click);
+            // 
+            // GrillaEfectivoPagar
+            // 
+            this.GrillaEfectivoPagar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.GrillaEfectivoPagar.Location = new System.Drawing.Point(25, 67);
+            this.GrillaEfectivoPagar.Name = "GrillaEfectivoPagar";
+            this.GrillaEfectivoPagar.ReadOnly = true;
+            this.GrillaEfectivoPagar.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.GrillaEfectivoPagar.Size = new System.Drawing.Size(763, 79);
+            this.GrillaEfectivoPagar.TabIndex = 59;
+            // 
             // FrmAutos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1827,6 +1886,7 @@
             this.tabPage5.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GrillaEfectivoPagar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1987,5 +2047,10 @@
         private System.Windows.Forms.Button btnAgregarCliente;
         private System.Windows.Forms.DataGridView GrillaCliente;
         private System.Windows.Forms.CheckBox chkSinRegistrarCliente;
+        private System.Windows.Forms.Button btnQuitarEfectivoPagar;
+        private System.Windows.Forms.Button btnAgregarEfectivoPagar;
+        private System.Windows.Forms.MaskedTextBox txtFechaEfectivoPagar;
+        private System.Windows.Forms.Label label45;
+        private System.Windows.Forms.DataGridView GrillaEfectivoPagar;
     }
 }

@@ -13,6 +13,7 @@ namespace Concesionaria
 
     public partial class FrmAutos : Form
     {
+        DataTable tbEfectivoPagar;
         DataTable tbListaPapeles;
         DataTable tbCliente;
         public FrmAutos()
@@ -51,6 +52,7 @@ namespace Concesionaria
         private void InicializarComponentes()
         {
             txtFecha.Text = DateTime.Now.ToShortDateString();
+            txtFechaEfectivoPagar.Text = txtFecha.Text;
             Clases.cFunciones fun = new Clases.cFunciones();
             fun.LlenarCombo(cmb_CodMarca, "Marca", "Nombre", "CodMarca");
             //  fun.LlenarCombo(cmbCiudad, "Ciudad", "Nombre", "CodCiudad");
@@ -84,6 +86,7 @@ namespace Concesionaria
             tbListaPapeles.Columns.Add("FechaVencimiento");
             string ColCliente = "CodCliente;Apellido;Nombre;Nrodocumento;Telefono";
             tbCliente = fun.CrearTabla(ColCliente);
+            tbEfectivoPagar = fun.CrearTabla("CodCompra;Cuota;Importe;Vencimiento");
         }
 
         private void GrabarAutos(SqlConnection con, SqlTransaction Transaccion)
@@ -245,9 +248,9 @@ namespace Concesionaria
 
             if (txtTotalCheque.Text != "")
                 TotalCheques = fun.ToDouble(txtTotalCheque.Text);
-
-            if (txtEfectivoaPagar.Text != "")
-                EfectivoaPagar = fun.ToDouble(txtEfectivoaPagar.Text);
+            
+            if (txtTotalEfectivosaPagar.Text != "")
+                EfectivoaPagar = fun.ToDouble(txtTotalEfectivosaPagar.Text);
 
             if (txtTotalGasto.Text != "")
                 Gastos = fun.ToDouble(txtTotalGasto.Text);
@@ -315,9 +318,20 @@ namespace Concesionaria
                     Int32? CodCliente = null;
                     if (txtCodCLiente.Text != "")
                         CodCliente = Convert.ToInt32(txtCodCLiente.Text);
+                    if (chkSinRegistrarCliente.Checked == true)
+                        CodCliente = cliente.GetcodClienteNulo();
                     double ImporteaPagar = fun.ToDouble(txtEfectivoaPagar.Text);
+                    DateTime FechaImporteApgar = DateTime.Now;
+                    int Cuota = 0;
                     Clases.cEfectivoaPagar objEft = new Clases.cEfectivoaPagar();
-                    objEft.Insertar(con, Transaccion, Convert.ToDateTime(txtFecha.Text), ImporteaPagar, CodCompra, CodCliente, CodAuto);
+                    for (int i=0;i< tbEfectivoPagar.Rows.Count;i++)
+                    {
+                        ImporteaPagar = fun.ToDouble(tbEfectivoPagar.Rows[i]["Importe"].ToString ());
+                        FechaImporteApgar = Convert.ToDateTime(tbEfectivoPagar.Rows[i]["Vencimiento"].ToString());
+                        Cuota = Convert.ToInt32(tbEfectivoPagar.Rows[i]["Cuota"].ToString());
+                        objEft.Insertar(con, Transaccion, Convert.ToDateTime(txtFecha.Text), ImporteaPagar, CodCompra, CodCliente, CodAuto, Cuota);
+                    }
+                   
                 }
                 if (txtTotalVehiculo.Text != "")
                     GrabarVenta(con, Transaccion);
@@ -369,6 +383,8 @@ namespace Concesionaria
             tbCliente.Rows.Clear();
             GrillaCliente.DataSource = tbCliente;
             chkSinRegistrarCliente.Checked = false;
+            tbEfectivoPagar.Rows.Clear();
+            GrillaEfectivoPagar.DataSource = tbEfectivoPagar;
         }
 
         private void CargarImagen(Int32 CodAuto)
@@ -1727,9 +1743,7 @@ namespace Concesionaria
 
         private void txtEfectivoaPagar_Leave(object sender, EventArgs e)
         {
-            Clases.cFunciones fun = new Clases.cFunciones();
-            txtEfectivoaPagar.Text = fun.FormatoEnteroMiles(txtEfectivoaPagar.Text);
-            txtTotalEfectivosaPagar.Text = txtEfectivoaPagar.Text;
+            
         }
 
         private void bnAgregarGastosRecepcion_Click_1(object sender, EventArgs e)
@@ -2441,6 +2455,32 @@ namespace Concesionaria
         private void GrillaCheques_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void btnAgregarEfectivoPagar_Click(object sender, EventArgs e)
+        {
+            cFunciones fun = new Clases.cFunciones();
+            string Importe = txtEfectivoaPagar.Text;
+            DateTime Fecha = Convert.ToDateTime(txtFechaEfectivoPagar.Text);
+            int Cuota = tbEfectivoPagar.Rows.Count;
+            Cuota = Cuota + 1;
+            string Valor = "0;" + Cuota;
+            Valor = Valor + ";" + Importe + ";" + Fecha;
+            tbEfectivoPagar= fun.AgregarFilas(tbEfectivoPagar, Valor);
+            GrillaEfectivoPagar.DataSource = tbEfectivoPagar;
+            fun.AnchoColumnas(GrillaEfectivoPagar, "0;20;50;30");
+            txtEfectivoaPagar.Text = "";
+            Double Total = fun.TotalizarColumna(tbEfectivoPagar, "Importe");
+            txtTotalEfectivosaPagar.Text = Total.ToString();
+            txtTotalEfectivosaPagar.Text = fun.FormatoEnteroMiles(txtTotalEfectivosaPagar.Text);
+            txtTotalEfectivosaPagar.Text = txtTotalEfectivosaPagar.Text;
+        }
+
+        private void btnQuitarEfectivoPagar_Click(object sender, EventArgs e)
+        {
+            tbEfectivoPagar.Rows.Clear();
+            GrillaEfectivoPagar.DataSource = tbEfectivoPagar;
+            txtTotalEfectivosaPagar.Text = "0";
         }
     }
 }

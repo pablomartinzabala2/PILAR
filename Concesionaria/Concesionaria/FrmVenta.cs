@@ -188,7 +188,7 @@ namespace Concesionaria
                         txtCodStock.Text = trdo2.Rows[0]["CodStock"].ToString();
                        // GetExTitular(Convert.ToInt32(trdo2.Rows[0]["CodCliente"].ToString()));
                         GetCostos(Convert.ToInt32(txtCodStock.Text));
-                        CargarGastosGeneralesxCodStoxk(Convert.ToInt32(txtCodStock.Text));
+                      //  CargarGastosGeneralesxCodStoxk(Convert.ToInt32(txtCodStock.Text));
                         if (trdo2.Rows[0]["CodCliente"].ToString() != "")
                         {
                             // txtCodCLiente.Text = trdo2.Rows[0]["CodCliente"].ToString();
@@ -4736,6 +4736,33 @@ namespace Concesionaria
             Principal.RutaImagen = txtRutaImagenCliente.Text;
             FrmVerFotos frm = new FrmVerFotos();
             frm.ShowDialog();
+        }
+
+        private void GrillaCuotas_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void btnBuscarAuto_Click(object sender, EventArgs e)
+        {
+            FrmBuscarAuto form = new FrmBuscarAuto();
+            form.FormClosing += new FormClosingEventHandler(formBuscadorAuto_FormClosing);
+            form.ShowDialog();
+        }
+
+        private void formBuscadorAuto_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Int32 CodAuto = Convert.ToInt32(Principal.CodigoPrincipalAbm);
+            cAuto auto = new Clases.cAuto();
+            DataTable trdo = auto.GetAutoxCodigo(CodAuto);
+            if (trdo.Rows.Count >0)
+            {
+                if (trdo.Rows[0]["Patente"].ToString ()!="")
+                {
+                    string Patente = trdo.Rows[0]["Patente"].ToString();
+                    txtPatente.Text = Patente;
+                }
+            }
         }
     }
 };

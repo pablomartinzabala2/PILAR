@@ -8,9 +8,9 @@ namespace Concesionaria.Clases
 {
     public class cEfectivoaPagar
     {
-        public void Insertar(SqlConnection con, SqlTransaction Transaccion,DateTime Fecha,double Importe,Int32 CodCompra,Int32? CodCliente,Int32 CodAuto)
+        public void Insertar(SqlConnection con, SqlTransaction Transaccion,DateTime Fecha,double Importe,Int32 CodCompra,Int32? CodCliente,Int32 CodAuto, int Cuota)
         {
-            string sql = "insert into EfectivosaPagar(Fecha,Importe,Saldo,CodCompra,CodCliente,CodAuto,ImportePagado)";
+            string sql = "insert into EfectivosaPagar(Fecha,Importe,Saldo,CodCompra,CodCliente,CodAuto,ImportePagado,Cuota)";
             sql = sql + "values(" + "'" + Fecha.ToShortDateString () + "'";
             sql = sql + "," + Importe.ToString().Replace(",", ".");
             sql = sql + "," + Importe.ToString().Replace(",", ".");
@@ -21,6 +21,7 @@ namespace Concesionaria.Clases
                 sql = sql + "," + CodCliente.ToString();
             sql = sql + "," + CodAuto.ToString();
             sql = sql + ",0";
+            sql = sql + "," + Cuota.ToString();
             sql = sql + ")";
             SqlCommand comand = new SqlCommand();
             comand.Connection = con;

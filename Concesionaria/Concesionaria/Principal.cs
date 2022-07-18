@@ -155,6 +155,7 @@ namespace Concesionaria
                 FrmAlertas frm = new FrmAlertas();
                 frm.ShowDialog();
             }
+            /*
             VerificarPablo();
             cFunciones fun = new cFunciones();
             string Col = "Fecha;Apellido;Nombre;Telefono;Texto";
@@ -166,6 +167,7 @@ namespace Concesionaria
             DateTime Fut = Hoy.AddDays(3);
             //busca los cumpleaños y vencimiento prendas
             GetInfo(Ant, Fut);
+            */
            
         }
 

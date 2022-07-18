@@ -503,3 +503,4 @@ F:\PROGRAMACION 2\PILAR\PILAR\Concesionaria\Concesionaria\obj\x86\Debug\Concesio
 F:\PROGRAMACION 2\PILAR\PILAR\Concesionaria\Concesionaria\obj\x86\Debug\Concesionaria.csproj.GenerateResource.Cache
 F:\PROGRAMACION 2\PILAR\PILAR\Concesionaria\Concesionaria\obj\x86\Debug\RdlCompile.cache
 F:\PROGRAMACION 2\PILAR\PILAR\Concesionaria\Concesionaria\obj\x86\Debug\RdlCompile.compiled
+F:\PROGRAMACION 2\PILAR\PILAR\Concesionaria\Concesionaria\obj\x86\Debug\Concesionaria.FrmBuscarAuto.resources

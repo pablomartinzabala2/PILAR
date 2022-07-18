@@ -72,6 +72,7 @@ namespace Concesionaria
 
         private void Buscar()
         {
+            cFunciones fun = new cFunciones();
             DateTime FechaDesde = Convert.ToDateTime(txtFechaDesde.Text);
             DateTime FechaHasta = Convert.ToDateTime(txtFechaHasta.Text);
             string Patente = txtPatente.Text.Trim();

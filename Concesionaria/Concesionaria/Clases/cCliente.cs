@@ -350,6 +350,21 @@ namespace Concesionaria.Clases
             return cDb.ExecuteDataTable(sql);
         }
 
+        public int GetcodClienteNulo()
+        {
+            int CodCli = 0;
+            string sql = "select * from Cliente ";
+            sql = sql + " where ClienteNulo = 1 ";
+            DataTable trdo = cDb.ExecuteDataTable(sql);
+            if (trdo.Rows.Count >0)
+            {
+                if (trdo.Rows[0]["CodCliente"].ToString () !="")
+                {
+                    CodCli = Convert.ToInt32(trdo.Rows[0]["CodCliente"].ToString());
+                }
+            }
+            return CodCli;
+        }
 
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Concesionaria.Clases;
+using System.Data.SqlClient;
 namespace Concesionaria
 {
     public partial class FrmListadoCompra : Form
@@ -22,6 +23,7 @@ namespace Concesionaria
             txtFechaHasta.Text = Fecha.ToShortDateString();
             Fecha = Fecha.AddMonths(-1);
             txtFechaDesde.Text  = Fecha.ToShortDateString();
+            Buscar();
         }
 
         private void btnBuscar_Click(object sender, EventArgs e)
@@ -65,6 +67,11 @@ namespace Concesionaria
                 Mensaje("La fecha Hasta es incorrecta");
                 return;
             }
+            Buscar();
+        }
+
+        private void Buscar()
+        {
             DateTime FechaDesde = Convert.ToDateTime(txtFechaDesde.Text);
             DateTime FechaHasta = Convert.ToDateTime(txtFechaHasta.Text);
             string Patente = txtPatente.Text.Trim();
@@ -74,12 +81,6 @@ namespace Concesionaria
             Grilla.DataSource = trdo;
             string Col = "0;20;20;20;20;20";
             fun.AnchoColumnas(Grilla, Col);
-            /*
-            Grilla.Columns[0].Visible = false;
-            Grilla.Columns[2].Width = 150;
-            Grilla.Columns[3].Width = 150;
-            Grilla.Columns[5].Width = 250;
-            */
             Grilla.Columns[5].HeaderText = "Importe Compra";
         }
 
@@ -94,6 +95,86 @@ namespace Concesionaria
             Principal.CodCompra = CodCompra;
             FrmAutos frm = new Concesionaria.FrmAutos();
             frm.ShowDialog();
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            string msj = "Confirma anular la Compra ";
+            var result = MessageBox.Show(msj, "Información",
+                                 MessageBoxButtons.YesNo,
+                                 MessageBoxIcon.Question);
+
+            // If the no button was pressed ...
+            if (result == DialogResult.No)
+            {
+                return;
+            }
+
+            if (Grilla.CurrentRow ==null)
+            {
+                MessageBox.Show("Debe seleccionar un registro para continuar");
+                return;
+            }
+            Int32 CodCompra =Convert.ToInt32 (Grilla.CurrentRow.Cells[0].Value.ToString ()); 
+            Double ImporteEfectivo = 0;
+            Int32 CodStockEntrada = 0;
+            Int32? CodStockSalida = null;
+            string Patente = "";
+            cCompra compra = new cCompra();
+            DataTable trdo = compra.GetCompraxCodigo(Convert.ToInt32 (CodCompra));
+            DateTime Fecha = DateTime.Now;
+            string Descripcion = "";
+            if (trdo.Rows.Count >0)
+            {
+                if (trdo.Rows[0]["ImporteEfectivo"].ToString ()!="")
+                {
+                    ImporteEfectivo = Convert.ToDouble(trdo.Rows[0]["ImporteEfectivo"].ToString());
+                }
+
+                if (trdo.Rows[0]["CodStockEntrada"].ToString() != "")
+                {
+                    CodStockEntrada = Convert.ToInt32(trdo.Rows[0]["CodStockEntrada"].ToString());
+                }
+
+                if (trdo.Rows[0]["CodStockSalida"].ToString() != "")
+                {
+                    CodStockSalida = Convert.ToInt32(trdo.Rows[0]["CodStockSalida"].ToString());
+                }
+
+                Patente = trdo.Rows[0]["Patente"].ToString();
+                Descripcion = "Anulación Compra , Patente " + Patente;
+            }
+            cStockAuto stock = new cStockAuto();
+            cChequesaPagar cheque = new cChequesaPagar();
+            SqlConnection con = new SqlConnection();
+            cMovimiento mov = new cMovimiento();
+            con.ConnectionString = Clases.cConexion.Cadenacon();
+            con.Open();
+            SqlTransaction Transaccion;
+            Transaccion = con.BeginTransaction();
+            try
+            {
+                compra.AnularCompra(con, Transaccion,Convert.ToInt32 (CodCompra));
+                stock.InsertarBajaStockTran(con, Transaccion, CodStockEntrada, DateTime.Now);
+                if (CodStockSalida !=null)
+                {
+                    stock.InsertarAltaStockTran(con, Transaccion, Convert.ToInt32 (CodStockSalida));
+                }
+                if (ImporteEfectivo >0)
+                    mov.RegistrarMovimientoDescripcionTransaccion(con, Transaccion, 0, Principal.CodUsuarioLogueado, ImporteEfectivo, 0, 0, 0, 0, Fecha,Descripcion , CodCompra);
+                cheque.BorrarChequesaPagar(con, Transaccion, Convert.ToInt32(CodCompra));
+                Transaccion.Commit();
+                con.Close();
+                MessageBox.Show("Datos anulados correctamente", Clases.cMensaje.Mensaje());
+                Buscar();    
+            }
+            catch (Exception ex)
+            {
+                msj = "Hubo un error en el proceso " + ex.Message.ToString();
+                MessageBox.Show(msj, Clases.cMensaje.Mensaje());
+                Transaccion.Rollback();
+                con.Close();
+            }
         }
     }
 }

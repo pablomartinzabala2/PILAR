@@ -29,6 +29,11 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnEliminar = new System.Windows.Forms.Button();
+            this.btnAbrirCompra = new System.Windows.Forms.Button();
+            this.btnBuscarCompra = new System.Windows.Forms.Button();
+            this.txtPatente = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.txtTotal = new System.Windows.Forms.TextBox();
             this.Grilla = new System.Windows.Forms.DataGridView();
@@ -37,11 +42,7 @@
             this.txtFechaDesde = new System.Windows.Forms.MaskedTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtPatente = new System.Windows.Forms.TextBox();
-            this.btnBuscarCompra = new System.Windows.Forms.Button();
-            this.btnAbrirCompra = new System.Windows.Forms.Button();
-            this.btnEliminar = new System.Windows.Forms.Button();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grilla)).BeginInit();
             this.SuspendLayout();
@@ -68,6 +69,52 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Listado de Compras";
+            // 
+            // btnEliminar
+            // 
+            this.btnEliminar.Image = global::Concesionaria.Properties.Resources.cancel;
+            this.btnEliminar.Location = new System.Drawing.Point(709, 27);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(34, 30);
+            this.btnEliminar.TabIndex = 53;
+            this.btnEliminar.UseVisualStyleBackColor = true;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
+            // btnAbrirCompra
+            // 
+            this.btnAbrirCompra.Image = global::Concesionaria.Properties.Resources.carpeta;
+            this.btnAbrirCompra.Location = new System.Drawing.Point(669, 29);
+            this.btnAbrirCompra.Name = "btnAbrirCompra";
+            this.btnAbrirCompra.Size = new System.Drawing.Size(34, 30);
+            this.btnAbrirCompra.TabIndex = 52;
+            this.btnAbrirCompra.UseVisualStyleBackColor = true;
+            this.btnAbrirCompra.Click += new System.EventHandler(this.btnAbrirCompra_Click);
+            // 
+            // btnBuscarCompra
+            // 
+            this.btnBuscarCompra.Image = global::Concesionaria.Properties.Resources.zoom;
+            this.btnBuscarCompra.Location = new System.Drawing.Point(629, 29);
+            this.btnBuscarCompra.Name = "btnBuscarCompra";
+            this.btnBuscarCompra.Size = new System.Drawing.Size(34, 30);
+            this.btnBuscarCompra.TabIndex = 51;
+            this.btnBuscarCompra.UseVisualStyleBackColor = true;
+            this.btnBuscarCompra.Click += new System.EventHandler(this.btnBuscarCompra_Click);
+            // 
+            // txtPatente
+            // 
+            this.txtPatente.Location = new System.Drawing.Point(439, 34);
+            this.txtPatente.Name = "txtPatente";
+            this.txtPatente.Size = new System.Drawing.Size(184, 23);
+            this.txtPatente.TabIndex = 50;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(376, 40);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(57, 17);
+            this.label3.TabIndex = 49;
+            this.label3.Text = "Patente";
             // 
             // label4
             // 
@@ -146,51 +193,6 @@
             this.label2.TabIndex = 40;
             this.label2.Text = "Fecha Hasta";
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(376, 40);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(57, 17);
-            this.label3.TabIndex = 49;
-            this.label3.Text = "Patente";
-            // 
-            // txtPatente
-            // 
-            this.txtPatente.Location = new System.Drawing.Point(439, 34);
-            this.txtPatente.Name = "txtPatente";
-            this.txtPatente.Size = new System.Drawing.Size(184, 23);
-            this.txtPatente.TabIndex = 50;
-            // 
-            // btnBuscarCompra
-            // 
-            this.btnBuscarCompra.Image = global::Concesionaria.Properties.Resources.zoom;
-            this.btnBuscarCompra.Location = new System.Drawing.Point(629, 29);
-            this.btnBuscarCompra.Name = "btnBuscarCompra";
-            this.btnBuscarCompra.Size = new System.Drawing.Size(34, 30);
-            this.btnBuscarCompra.TabIndex = 51;
-            this.btnBuscarCompra.UseVisualStyleBackColor = true;
-            this.btnBuscarCompra.Click += new System.EventHandler(this.btnBuscarCompra_Click);
-            // 
-            // btnAbrirCompra
-            // 
-            this.btnAbrirCompra.Image = global::Concesionaria.Properties.Resources.carpeta;
-            this.btnAbrirCompra.Location = new System.Drawing.Point(669, 29);
-            this.btnAbrirCompra.Name = "btnAbrirCompra";
-            this.btnAbrirCompra.Size = new System.Drawing.Size(34, 30);
-            this.btnAbrirCompra.TabIndex = 52;
-            this.btnAbrirCompra.UseVisualStyleBackColor = true;
-            this.btnAbrirCompra.Click += new System.EventHandler(this.btnAbrirCompra_Click);
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.Image = global::Concesionaria.Properties.Resources.cancel;
-            this.btnEliminar.Location = new System.Drawing.Point(709, 27);
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(34, 30);
-            this.btnEliminar.TabIndex = 53;
-            this.btnEliminar.UseVisualStyleBackColor = true;
-            // 
             // FrmListadoCompra
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -227,5 +229,6 @@
         private System.Windows.Forms.Button btnAbrirCompra;
         private System.Windows.Forms.Button btnBuscarCompra;
         private System.Windows.Forms.Button btnEliminar;
+        private System.Windows.Forms.ColorDialog colorDialog1;
     }
 }

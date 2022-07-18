@@ -208,14 +208,15 @@ namespace Concesionaria
                 MessageBox.Show("Ingresar una fecha para  continuar", Clases.cMensaje.Mensaje());
                 return;
             }
-
+            if (chkSinRegistrarCliente.Checked == false)
             if (tbCliente.Rows.Count < 1)
             {
                 Mensaje("Debe ingresar un cliente para continuar");
                 return;
             }
 
-            if (tbCliente.Rows[0]["CodCliente"].ToString() == "")
+            if (chkSinRegistrarCliente.Checked == false)
+                if (tbCliente.Rows[0]["CodCliente"].ToString() == "")
             {
                 Mensaje("Debe ingresar un cliente para continuar");
                 return;
@@ -297,7 +298,8 @@ namespace Concesionaria
                     CodCompra = GrabarCompra(con, Transaccion);
                 if (CodCompra > 0)
                 {
-                    GrabarCompraxCliente(con, Transaccion, CodCompra);
+                    if (chkSinRegistrarCliente.Checked==false)
+                        GrabarCompraxCliente(con, Transaccion, CodCompra);
                 }
                 if (Concesion == 0)
                     GrabarGastosPagar(con, Transaccion, Convert.ToInt32(txtCodAuto.Text), CodCompra);
@@ -331,10 +333,8 @@ namespace Concesionaria
             {
                 string msj = "Hubo un error en el proceso " + ex.Message.ToString();
                 MessageBox.Show(msj, Clases.cMensaje.Mensaje());
-
                 Transaccion.Rollback();
                 con.Close();
-
             }
 
         }
@@ -368,6 +368,7 @@ namespace Concesionaria
             tbListaPapeles.Rows.Clear();
             tbCliente.Rows.Clear();
             GrillaCliente.DataSource = tbCliente;
+            chkSinRegistrarCliente.Checked = false;
         }
 
         private void CargarImagen(Int32 CodAuto)
@@ -1578,8 +1579,16 @@ namespace Concesionaria
             DateTime Fecha = DateTime.Now;
             if (txtCodCLiente.Text != "")
                 CodCliente = Convert.ToInt32(txtCodCLiente.Text);
+           
+   
+            if (chkSinRegistrarCliente.Checked == true)
+            {
+                cCliente clie = new cCliente();
+                CodCliente = clie.GetcodClienteNulo();
+            }
 
-            CodCliente = GetCodClienteGrilla();
+            if (chkSinRegistrarCliente.Checked == false)
+                CodCliente = GetCodClienteGrilla();
 
             if (txtEfectivo.Text != "")
                 ImporteEfectivo = fun.ToDouble(txtEfectivo.Text);
@@ -2427,6 +2436,11 @@ namespace Concesionaria
             string Cod = GrillaCliente.CurrentRow.Cells[0].Value.ToString();
             tbCliente = fun.EliminarFila(tbCliente, "CodCliente", Cod);
             GrillaCliente.DataSource = tbCliente;
+        }
+
+        private void GrillaCheques_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

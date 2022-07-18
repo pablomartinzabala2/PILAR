@@ -165,6 +165,20 @@ namespace Concesionaria.Clases
             sql = sql + " where CodStock=" + CodStock.ToString () ;
             cDb.ExecutarNonQuery(sql);
         }
+        
+        public void InsertarBajaStockTran(SqlConnection con, SqlTransaction Transaccion, Int32 CodStock, DateTime Fecha)
+        {
+            string sql = " update StockAuto set FechaBaja=" + "'" + Fecha.ToShortDateString() + "'";
+            sql = sql + " where CodStock=" + CodStock.ToString();
+            cDb.EjecutarNonQueryTransaccion(con, Transaccion, sql);
+        }
+
+        public void InsertarAltaStockTran(SqlConnection con, SqlTransaction Transaccion, Int32 CodStock)
+        {
+            string sql = " update StockAuto set FechaBaja=null "; 
+            sql = sql + " where CodStock=" + CodStock.ToString();
+            cDb.EjecutarNonQueryTransaccion(con, Transaccion, sql);
+        }
 
         public DataTable GetStockAutos(Int32 CodAuto)
         {

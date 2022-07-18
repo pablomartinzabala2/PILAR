@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Data.SqlClient;
 namespace Concesionaria.Clases
 {
     public  class cChequesaPagar
@@ -76,6 +77,13 @@ namespace Concesionaria.Clases
             sql = sql + " where c.CodBanco = b.CodBanco";
             sql = sql + " and c.CodCompra=" + CodCompra.ToString ();
             return cDb.ExecuteDataTable(sql);
+        }
+
+        public void BorrarChequesaPagar(SqlConnection con, SqlTransaction Transaccion, Int32 CodCompra)
+        {
+            string sql = "delete from ChequesPagar  ";
+            sql = sql + " where CodCompra=" + CodCompra.ToString();
+            cDb.EjecutarNonQueryTransaccion(con, Transaccion, sql);
         }
     }
 }

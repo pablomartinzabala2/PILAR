@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Data.SqlClient;
 namespace Concesionaria.Clases
 {
     public class cCompra
@@ -23,8 +24,11 @@ namespace Concesionaria.Clases
 
         public DataTable GetCompraxCodigo(Int32 CodCompra)
         {
-            string sql = "select * from compra";
-            sql = sql + " where CodCompra=" + CodCompra.ToString ();
+            string sql = "select c.* ";
+            sql = sql + ",(select a.Patente from auto a where a.CodAuto = sa.CodAuto) as Patente";
+            sql = sql + " from compra c,StockAuto sa";
+            sql = sql + " where c.CodStockEntrada = sa.CodStock";
+            sql = sql + " and c.CodCompra=" + CodCompra.ToString ();
             return cDb.ExecuteDataTable(sql);
         }
 
@@ -42,6 +46,12 @@ namespace Concesionaria.Clases
                 sql = sql + " and a.Patente like " + "'%" + Patente + "%'";
             }
             return cDb.ExecuteDataTable(sql);
+        }
+
+        public void AnularCompra(SqlConnection con, SqlTransaction Transaccion,Int32 CodCompra)
+        {
+            string sql = "delete from Compra where CodCompra =" + CodCompra.ToString();
+            cDb.EjecutarNonQueryTransaccion(con, Transaccion, sql);
         }
     }
 }

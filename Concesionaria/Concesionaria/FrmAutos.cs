@@ -320,7 +320,7 @@ namespace Concesionaria
                 if (Concesion == 0)
                     GrabarGastosPagar(con, Transaccion, Convert.ToInt32(txtCodAuto.Text), CodCompra);
                 if (Concesion == 0)
-                    GrabarCheques(con, Transaccion, CodCompra);
+                    GrabarCheques(con, Transaccion, CodCompra, CodMoneda);
                 if (Concesion == 0)
                     GrabarMovimiento(con, Transaccion, CodCompra, CodMoneda);
                 if (Concesion == 0)
@@ -1548,7 +1548,7 @@ namespace Concesionaria
 
         }
 
-        private void GrabarCheques(SqlConnection con, SqlTransaction Transaccion, Int32 CodCompra)
+        private void GrabarCheques(SqlConnection con, SqlTransaction Transaccion, Int32 CodCompra,int CodMoneda)
         {
             Int32 CodAuto = Convert.ToInt32(txtCodAuto.Text);
             Int32 CodCLiente = GetCodClienteGrilla();
@@ -1561,7 +1561,7 @@ namespace Concesionaria
                     {
                         DateTime FechaVencimiento = Convert.ToDateTime(GrillaCheques.Rows[j].Cells[2].Value.ToString());
                         string sImporteCheque = GrillaCheques.Rows[j].Cells[1].Value.ToString();
-                        string sqlCheque = "insert into ChequesPagar(NroCheque,Importe,Fecha,CodCliente,CodBanco,CodCompra,CodAuto,FechaVencimiento,Saldo)";
+                        string sqlCheque = "insert into ChequesPagar(NroCheque,Importe,Fecha,CodCliente,CodBanco,CodCompra,CodAuto,FechaVencimiento,Saldo,CodMoneda)";
                         sqlCheque = sqlCheque + "values (";
                         sqlCheque = sqlCheque + "'" + GrillaCheques.Rows[j].Cells[0].Value.ToString() + "'";
                         sqlCheque = sqlCheque + "," + fun.ToDouble(sImporteCheque);
@@ -1572,6 +1572,7 @@ namespace Concesionaria
                         sqlCheque = sqlCheque + "," + CodAuto.ToString();
                         sqlCheque = sqlCheque + "," + "'" + FechaVencimiento.ToShortDateString() + "'";
                         sqlCheque = sqlCheque + "," + fun.ToDouble(sImporteCheque);
+                        sqlCheque = sqlCheque + "," + CodMoneda.ToString();
                         sqlCheque = sqlCheque + ")";
 
                         SqlCommand ComandCheque = new SqlCommand();

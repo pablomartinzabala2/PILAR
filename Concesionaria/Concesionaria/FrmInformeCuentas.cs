@@ -40,7 +40,7 @@ namespace Concesionaria
             GetDeudasxPrestamo();
             GetEfectivosaPagar();
             GetCobranzaGeneral();
-            GetChequesPagar();
+            GetChequesPagar(CodMoneda);
           
             Clases.cCuota cuota = new Clases.cCuota();
             Clases.cCuotasAnteriores cuotasAnt = new Clases.cCuotasAnteriores();
@@ -64,7 +64,7 @@ namespace Concesionaria
             DataTable trdo = res.GetResumenCuentas(CodMoneda);
             if (trdo.Rows.Count > 0)
             {
-                if (trdo.Rows[0]["ImporteEfectivo"].ToString ()!="" )
+                if (trdo.Rows[0]["ImporteEfectivo"].ToString() != "")
                 {
                     double ImporteEfectivo = Convert.ToDouble(trdo.Rows[0]["ImporteEfectivo"]);
                     txtEfectivo.Text = fun.TransformarEntero(ImporteEfectivo.ToString().Replace(",", "."));
@@ -86,6 +86,14 @@ namespace Concesionaria
                     txtBanco.Text = fun.TransformarEntero(ImporteBanco.ToString().Replace(",", "."));
                     txtBanco.Text = fun.FormatoEnteroMiles(txtBanco.Text);
                 }
+                else
+                {
+                    txtEfectivo.Text = "0";
+                    txtPrenda.Text = "0";
+                    txtCobranzas.Text = "0";
+                    txtBanco.Text = "0";
+                }
+            }
                 
 
                 Clases.cComisionVendedor com = new Clases.cComisionVendedor();
@@ -109,7 +117,7 @@ namespace Concesionaria
                 GetPrendas();
                 GetTotalVehiculo(CodMoneda);
                 GetTarjeta();
-            }
+            
             btnActualizar.Focus();
         }
 
@@ -150,10 +158,10 @@ namespace Concesionaria
             }
         }
 
-        private void GetChequesPagar()
+        private void GetChequesPagar(int CodMoneda)
         {
             Clases.cChequesaPagar che = new Clases.cChequesaPagar();
-            txtTotalDeudaCheque.Text = che.GetTotalChequesaPagar().ToString ();
+            txtTotalDeudaCheque.Text = che.GetTotalChequesaPagar(CodMoneda).ToString ();
             Clases.cFunciones fun = new Clases.cFunciones ();
             txtTotalDeudaCheque.Text = fun.FormatoEnteroMiles (txtTotalDeudaCheque.Text);
         }

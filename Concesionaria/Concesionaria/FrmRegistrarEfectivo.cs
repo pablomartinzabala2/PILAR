@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using Concesionaria.Clases;
 namespace Concesionaria
 {
     public partial class FrmRegistrarEfectivo : Form
@@ -37,6 +37,12 @@ namespace Concesionaria
                 return;
             }
 
+            if (cmbMoneda.SelectedIndex <1)
+            {
+                MessageBox.Show("Debe selecionar una moneda", Clases.cMensaje.Mensaje());
+                return;
+            }
+            int CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
             DateTime Fecha = Convert.ToDateTime(txtFecha.Text);
             string Descripcion = txtDescripcion.Text;
             Double Importe = fun.ToDouble(txtEfectivo.Text);
@@ -44,7 +50,7 @@ namespace Concesionaria
             if (cmbTipo.SelectedIndex == 1)
                 Importe = (-1) * Importe; 
             Clases.cMovimiento mov = new Clases.cMovimiento();
-            mov.RegistrarMovimientoDescripcion (0, Principal.CodUsuarioLogueado, Importe  , 0, 0, 0, 0,Fecha ,Descripcion );
+            mov.RegistrarMovimientoDescripcion (0, Principal.CodUsuarioLogueado, Importe  , 0, 0, 0, 0,Fecha ,Descripcion,CodMoneda);
             MessageBox.Show("Datos grabados correctamente", Clases.cMensaje.Mensaje());
             txtEfectivo.Text = "";
             txtDescripcion.Text = "";
@@ -65,8 +71,12 @@ namespace Concesionaria
             txtFecha.Text = DateTime.Now.ToShortDateString();
             cmbTipo.Items.Add("Ingreso");
             cmbTipo.Items.Add("Egreso");
-            
             cmbTipo.SelectedIndex = 0;
+            Clases.cFunciones fun = new Clases.cFunciones();
+            DataTable tbMoneda = cDb.ExecuteDataTable("select * from moneda order by codmoneda");
+            fun.LlenarComboDatatable(cmbMoneda, tbMoneda, "Nombre", "CodMoneda");
+            if (cmbMoneda.Items.Count > 0)
+                cmbMoneda.SelectedIndex = 1;
         }
     }
 }

@@ -22,6 +22,21 @@ namespace Concesionaria.Clases
             return Total;
         }
 
+        public double GetTotalChequesaPagar(int CodMoneda)
+        {
+            double Total = 0;
+            string sql = "select sum(Saldo) as Importe";
+            sql = sql + " from ChequesPagar";
+            sql = sql + " where CodMoneda =" + CodMoneda.ToString();
+            DataTable trdo = cDb.ExecuteDataTable(sql);
+            if (trdo.Rows.Count > 0)
+            {
+                if (trdo.Rows[0]["Importe"].ToString() != "")
+                    Total = Convert.ToDouble(trdo.Rows[0]["Importe"].ToString());
+            }
+            return Total;
+        }
+
         public DataTable GetChequesPagar(DateTime FechaDesde, DateTime FechaHasta, int Impago,string Patente)
         {
             string sql = "select c.CodCheque, c.NroCheque,";

@@ -52,6 +52,29 @@ namespace Concesionaria.Clases
             cDb.ExecutarNonQuery(sql);
         }
 
+        public void RegistrarMovimientoDescripcion(Int32 CodVenta, Int32 CodUsuario, Double ImporteEfectivo,
+           Double ImporteDocumento, Double ImportePrenda, Double ImporteAuto, Double ImporteBanco, DateTime Fecha, string Descripcion,int CodMoneda)
+        {
+            string sql = "insert into Movimiento(";
+            sql = sql + "CodVenta,CodUsuario,ImporteEfectivo";
+            sql = sql + ",ImporteDocumento,ImportePrenda,ImporteAuto,ImporteBanco,Fecha,Descripcion,CodMoneda)";
+            if (CodVenta > 0)
+                sql = sql + "Values(" + CodVenta.ToString();
+            else
+                sql = sql + "Values(NULL";
+            sql = sql + "," + CodUsuario.ToString();
+            sql = sql + "," + ImporteEfectivo.ToString().Replace(",", "."); ;
+            sql = sql + "," + ImporteDocumento.ToString().Replace(",", ".");
+            sql = sql + "," + ImportePrenda.ToString().Replace(",", ".");
+            sql = sql + "," + ImporteAuto.ToString().Replace(",", ".");
+            sql = sql + "," + ImporteBanco.ToString().Replace(",", ".");
+            sql = sql + "," + "'" + Fecha.ToShortDateString() + "'";
+            sql = sql + "," + "'" + Descripcion + "'";
+            sql = sql + "," + CodMoneda.ToString();
+            sql = sql + ")";
+            cDb.ExecutarNonQuery(sql);
+        }
+
         public double GetImporteAutoNegativoxCodVenta(Int32 CodVenta)
         {
             double Total =0;
@@ -78,6 +101,20 @@ namespace Concesionaria.Clases
             sql = sql + " and ImporteEfectivo <>0 ";
             sql = sql + " order by m.CodMovimiento desc";
             return cDb.ExecuteDataTable (sql);
+        }
+
+        public DataTable GetMovimientoxFecha(DateTime FechaDesde, DateTime FechaHasta, string Concepto, int CodMoneda)
+        {
+            string sql = "select m.Fecha,m.Descripcion,m.ImporteEfectivo";
+            sql = sql + " from Movimiento m";
+            sql = sql + " where m.Fecha >=" + "'" + FechaDesde.ToShortDateString() + "'";
+            sql = sql + " and m.Fecha <=" + "'" + FechaHasta.ToShortDateString() + "'";
+            sql = sql + " and m.CodMoneda=" + CodMoneda.ToString();
+            if (Concepto != "")
+                sql = sql + " and Descripcion like " + "'" + "%" + Concepto + "%" + "'";
+            sql = sql + " and ImporteEfectivo <>0 ";
+            sql = sql + " order by m.CodMovimiento desc";
+            return cDb.ExecuteDataTable(sql);
         }
 
         public void RegistrarMovimientoDescripcionTransaccion(SqlConnection con,SqlTransaction Transaccion, Int32 CodVenta, Int32 CodUsuario, Double ImporteEfectivo,

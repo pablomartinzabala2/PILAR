@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Data;
+using Concesionaria.Clases;
 
 namespace Concesionaria
 {
@@ -37,12 +37,20 @@ namespace Concesionaria
                 MessageBox.Show("La fecha desde debe ser inferior a la fecha hasta", Clases.cMensaje.Mensaje());
                 return;
             }
-            
+
+            if (cmbMoneda.SelectedIndex <1)
+            {
+                MessageBox.Show("Debe seleccionar una moneda", Clases.cMensaje.Mensaje());
+                return;
+
+            }
+
+            int CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
             DateTime FechaDesde = Convert.ToDateTime(txtFechaDesde.Text);
             DateTime FechaHasta = Convert.ToDateTime(txtFechaHasta.Text);
             string Concepto = txtConcepto.Text;
             Clases.cMovimiento mov = new Clases.cMovimiento();
-            DataTable trdo = mov.GetMovimientoxFecha(FechaDesde, FechaHasta, Concepto);
+            DataTable trdo = mov.GetMovimientoxFecha(FechaDesde, FechaHasta, Concepto, CodMoneda);
 
             DataTable tResul = new DataTable();
             tResul.Columns.Add("Fecha");
@@ -94,6 +102,11 @@ namespace Concesionaria
             txtFechaHasta.Text = fechahoy.ToShortDateString();
             fechahoy = fechahoy.AddMonths(-1);
             txtFechaDesde.Text = fechahoy.ToShortDateString();
+            DataTable tbMoneda = cDb.ExecuteDataTable("select * from moneda order by codmoneda");
+            cFunciones fun = new Clases.cFunciones();
+            fun.LlenarComboDatatable(cmbMoneda, tbMoneda, "Nombre", "CodMoneda");
+            if (cmbMoneda.Items.Count > 0)
+                cmbMoneda.SelectedIndex = 1;
         }
     }
 }

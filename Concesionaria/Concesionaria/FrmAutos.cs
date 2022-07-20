@@ -87,9 +87,13 @@ namespace Concesionaria
             string ColCliente = "CodCliente;Apellido;Nombre;Nrodocumento;Telefono";
             tbCliente = fun.CrearTabla(ColCliente);
             tbEfectivoPagar = fun.CrearTabla("CodCompra;Cuota;Importe;Vencimiento");
+            DataTable tbMoneda = cDb.ExecuteDataTable("select * from moneda order by codmoneda");
+            fun.LlenarComboDatatable (cmbMoneda,tbMoneda , "Nombre", "CodMoneda");
+            if (cmbMoneda.Items.Count > 0)
+                cmbMoneda.SelectedIndex = 1;
         }
 
-        private void GrabarAutos(SqlConnection con, SqlTransaction Transaccion)
+        private void GrabarAutos(SqlConnection con, SqlTransaction Transaccion,int CodMoneda)
         {
             string Patente = "";
             Int32? CodMarca = null;
@@ -183,7 +187,7 @@ namespace Concesionaria
                     CodCliente = Convert.ToInt32(txtCodCLiente.Text);
                 CodCliente = GetCodClienteGrilla();
                 Clases.cStockAuto stockAuto = new Clases.cStockAuto();
-                stockAuto.InsertarStockAutoTransaccion(con, Transaccion, CodAuto, Fecha.ToShortDateString(), CodCliente, Principal.CodUsuarioLogueado, Importe);
+                stockAuto.InsertarStockAutoTransaccion(con, Transaccion, CodAuto, Fecha.ToShortDateString(), CodCliente, Principal.CodUsuarioLogueado, Importe, CodMoneda);
                 Clases.cCosto costo = new Clases.cCosto();
                 CodStock = stockAuto.GetMaxCodStockxAutoTransaccion(con, Transaccion, CodAuto);
                 txtCodStock.Text = CodStock.ToString();
@@ -218,6 +222,12 @@ namespace Concesionaria
                 return;
             }
 
+            if (cmbMoneda.SelectedIndex <1)
+            {
+                Mensaje("Debe seleccionar una moneda para continuarr");
+                return;
+            }
+
             if (chkSinRegistrarCliente.Checked == false)
                 if (tbCliente.Rows[0]["CodCliente"].ToString() == "")
             {
@@ -236,6 +246,9 @@ namespace Concesionaria
             double TotalCheques = 0;
             double EfectivoaPagar = 0;
             double Gastos = 0;
+            Int32 CodMoneda = 0;
+            if (cmbMoneda.SelectedIndex > 0)
+                CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
 
             if (txtTotal.Text != "")
                 Total = fun.ToDouble(txtTotal.Text);
@@ -295,7 +308,7 @@ namespace Concesionaria
             try
             {
                 Int32 CodCompra = 0;
-                GrabarAutos(con, Transaccion);
+                GrabarAutos(con, Transaccion, CodMoneda);
 
                 if (Concesion == 0)
                     CodCompra = GrabarCompra(con, Transaccion);
@@ -309,7 +322,7 @@ namespace Concesionaria
                 if (Concesion == 0)
                     GrabarCheques(con, Transaccion, CodCompra);
                 if (Concesion == 0)
-                    GrabarMovimiento(con, Transaccion, CodCompra);
+                    GrabarMovimiento(con, Transaccion, CodCompra, CodMoneda);
                 if (Concesion == 0)
                     GrabarMovimientoGastoRecepcion(con, Transaccion, CodCompra);
                 if (txtTotalEfectivosaPagar.Text != "" && txtTotalEfectivosaPagar.Text != "0")
@@ -329,7 +342,7 @@ namespace Concesionaria
                         ImporteaPagar = fun.ToDouble(tbEfectivoPagar.Rows[i]["Importe"].ToString ());
                         FechaImporteApgar = Convert.ToDateTime(tbEfectivoPagar.Rows[i]["Vencimiento"].ToString());
                         Cuota = Convert.ToInt32(tbEfectivoPagar.Rows[i]["Cuota"].ToString());
-                        objEft.Insertar(con, Transaccion, Convert.ToDateTime(txtFecha.Text), ImporteaPagar, CodCompra, CodCliente, CodAuto, Cuota);
+                        objEft.Insertar(con, Transaccion, Convert.ToDateTime(txtFecha.Text), ImporteaPagar, CodCompra, CodCliente, CodAuto, Cuota, CodMoneda);
                     }
                    
                 }
@@ -1592,6 +1605,10 @@ namespace Concesionaria
             double ImporteEfectivo = 0;
             Double ImporteCompra = 0;
             Int32 CodCliente = 0;
+            Int32 CodMoneda = 0;
+            if (cmbMoneda.SelectedIndex > 0)
+                CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
+
             DateTime Fecha = DateTime.Now;
             if (txtCodCLiente.Text != "")
                 CodCliente = Convert.ToInt32(txtCodCLiente.Text);
@@ -1623,6 +1640,7 @@ namespace Concesionaria
             sql = sql + ",CodCliente";
             sql = sql + ",ImporteCompra";
             sql = sql + ",Fecha";
+            sql = sql + ",CodMoneda";
             sql = sql + ")";
             sql = sql + "Values(" + txtCodStock.Text;
             if (txtCodStock2.Text != "")
@@ -1635,6 +1653,7 @@ namespace Concesionaria
             sql = sql + "," + CodCliente.ToString();
             sql = sql + "," + ImporteCompra.ToString().Replace(",", ".");
             sql = sql + "," + "'" + Fecha.ToShortDateString() + "'";
+            sql = sql + "," + CodMoneda.ToString();
             sql = sql + ")";
 
             if (txtCodStock2.Text != "")
@@ -1664,7 +1683,7 @@ namespace Concesionaria
             return CodCompra;
         }
 
-        private void GrabarMovimiento(SqlConnection con, SqlTransaction Transaccion, Int32 CodCompra)
+        private void GrabarMovimiento(SqlConnection con, SqlTransaction Transaccion, Int32 CodCompra,int CodMoneda)
         {
             DateTime Fecha = Convert.ToDateTime(txtFecha.Text);
             string Descripcion = "COMPRA DE AUTO " + txtPatente.Text;
@@ -1679,7 +1698,7 @@ namespace Concesionaria
 
             Importe = Importe - Gastos;
             Clases.cMovimiento mov = new Clases.cMovimiento();
-            mov.RegistrarMovimientoDescripcionTransaccion(con, Transaccion, -1, Principal.CodUsuarioLogueado, (-1) * Importe, 0, 0, ValorCompra, 0, Fecha, Descripcion, CodCompra);
+            mov.RegistrarMovimientoDescripcionTransaccion(con, Transaccion, -1, Principal.CodUsuarioLogueado, (-1) * Importe, 0, 0, ValorCompra, 0, Fecha, Descripcion, CodCompra, CodMoneda);
 
             if (txtTotalVehiculo.Text != "")
             {

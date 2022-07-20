@@ -53,5 +53,20 @@ namespace Concesionaria.Clases
             string sql = "delete from Compra where CodCompra =" + CodCompra.ToString();
             cDb.EjecutarNonQueryTransaccion(con, Transaccion, sql);
         }
+
+        public int GetCodMoneda (SqlConnection con, SqlTransaction Transaccion, Int32 CodCompra)
+        {
+            int COdMoneda = 0;
+            string sql = "select CodMoneda ";
+            sql = sql + " from Compra ";
+            sql = sql + " where CodCompra =" + CodCompra.ToString();
+            DataTable trdo = cDb.ExecuteDataTable(sql);
+            if (trdo.Rows.Count >0)
+            {
+                if (trdo.Rows[0]["CodMoneda"].ToString() != "")
+                    COdMoneda = Convert.ToInt32(trdo.Rows[0]["CodMoneda"].ToString());
+            }
+            return COdMoneda;
+        }
     }
 }

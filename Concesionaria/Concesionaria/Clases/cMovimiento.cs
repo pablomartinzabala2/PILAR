@@ -111,6 +111,39 @@ namespace Concesionaria.Clases
             Comand.ExecuteNonQuery();
             
         }
-    
+
+        public void RegistrarMovimientoDescripcionTransaccion(SqlConnection con, SqlTransaction Transaccion, Int32 CodVenta, Int32 CodUsuario, Double ImporteEfectivo,
+          Double ImporteDocumento, Double ImportePrenda, Double ImporteAuto, Double ImporteBanco, DateTime Fecha, string Descripcion, Int32 CodCompra,int CodMoneda)
+        {
+            string sql = "insert into Movimiento(";
+            sql = sql + "CodVenta,CodUsuario,ImporteEfectivo";
+            sql = sql + ",ImporteDocumento,ImportePrenda,ImporteAuto,ImporteBanco,Fecha,Descripcion,CodCompra,CodMoneda)";
+            if (CodVenta > 0)
+                sql = sql + "Values(" + CodVenta.ToString();
+            else
+                sql = sql + "Values(NULL";
+            sql = sql + "," + CodUsuario.ToString();
+            sql = sql + "," + ImporteEfectivo.ToString().Replace(",", "."); ;
+            sql = sql + "," + ImporteDocumento.ToString().Replace(",", ".");
+            sql = sql + "," + ImportePrenda.ToString().Replace(",", ".");
+            sql = sql + "," + ImporteAuto.ToString().Replace(",", ".");
+            sql = sql + "," + ImporteBanco.ToString().Replace(",", ".");
+            sql = sql + "," + "'" + Fecha.ToShortDateString() + "'";
+            sql = sql + "," + "'" + Descripcion + "'";
+            if (CodCompra > 0)
+                sql = sql + "," + CodCompra.ToString();
+            else
+                sql = sql + ",NULL";
+            sql = sql + "," + CodMoneda.ToString();
+            sql = sql + ")";
+
+            SqlCommand Comand = new SqlCommand();
+            Comand.Connection = con;
+            Comand.Transaction = Transaccion;
+            Comand.CommandText = sql;
+            Comand.ExecuteNonQuery();
+
+        }
+
     }
 }

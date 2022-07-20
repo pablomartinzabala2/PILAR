@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Concesionaria.Clases;
 
 namespace Concesionaria
 {
@@ -18,17 +19,29 @@ namespace Concesionaria
 
         private void FrmInformeCuentas_Load(object sender, EventArgs e)
         {
+            Clases.cFunciones fun = new Clases.cFunciones();
+            DataTable tbMoneda = cDb.ExecuteDataTable("select * from moneda order by codmoneda");
+            fun.LlenarComboDatatable(cmbMoneda, tbMoneda, "Nombre", "CodMoneda");
+            if (cmbMoneda.Items.Count > 0)
+                cmbMoneda.SelectedIndex = 1;
             Actualizar();
         }
 
         private void Actualizar()
         {
+            if (cmbMoneda.SelectedIndex <1)
+            {
+                MessageBox.Show("Debe selecionar una moneda", "Sistema");
+                return;
+            }
+            int CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
+            Clases.cFunciones fun = new Clases.cFunciones();
             //obtengo el importe de documentos a cobrar
             GetDeudasxPrestamo();
             GetEfectivosaPagar();
             GetCobranzaGeneral();
             GetChequesPagar();
-            Clases.cFunciones fun = new Clases.cFunciones();
+          
             Clases.cCuota cuota = new Clases.cCuota();
             Clases.cCuotasAnteriores cuotasAnt = new Clases.cCuotasAnteriores();
             Clases.cCheque cheque = new Clases.cCheque();
@@ -48,28 +61,32 @@ namespace Concesionaria
             txtDocumentosSinInteres.Text = fun.FormatoEnteroMiles(txtDocumentosSinInteres.Text);
             txtTotalCheque.Text = fun.FormatoEnteroMiles(ImporteCheque.ToString());
             Clases.cResumenCuentas res = new Clases.cResumenCuentas();
-            DataTable trdo = res.GetResumenCuentas();
+            DataTable trdo = res.GetResumenCuentas(CodMoneda);
             if (trdo.Rows.Count > 0)
             {
-                double ImporteEfectivo = Convert.ToDouble(trdo.Rows[0]["ImporteEfectivo"]);
-                txtEfectivo.Text = fun.TransformarEntero(ImporteEfectivo.ToString().Replace(",", "."));
-                txtEfectivo.Text = fun.FormatoEnteroMiles(txtEfectivo.Text);
+                if (trdo.Rows[0]["ImporteEfectivo"].ToString ()!="" )
+                {
+                    double ImporteEfectivo = Convert.ToDouble(trdo.Rows[0]["ImporteEfectivo"]);
+                    txtEfectivo.Text = fun.TransformarEntero(ImporteEfectivo.ToString().Replace(",", "."));
+                    txtEfectivo.Text = fun.FormatoEnteroMiles(txtEfectivo.Text);
 
-                double ImporteAuto = Convert.ToDouble(trdo.Rows[0]["ImporteAuto"]);
-                txtVehículo.Text = fun.TransformarEntero(ImporteAuto.ToString().Replace(",", "."));
-                txtVehículo.Text = fun.FormatoEnteroMiles(txtVehículo.Text);
+                    double ImporteAuto = Convert.ToDouble(trdo.Rows[0]["ImporteAuto"]);
+                    txtVehículo.Text = fun.TransformarEntero(ImporteAuto.ToString().Replace(",", "."));
+                    txtVehículo.Text = fun.FormatoEnteroMiles(txtVehículo.Text);
 
-                double ImportePrenda = Convert.ToDouble(trdo.Rows[0]["ImportePrenda"]);
-                txtPrenda.Text = fun.TransformarEntero(ImportePrenda.ToString().Replace(",", "."));
-                txtPrenda.Text = fun.FormatoEnteroMiles(txtPrenda.Text);
-                 
-                double ImporteCobranza = Convert.ToDouble(trdo.Rows[0]["ImporteCobranza"]);
-                txtCobranzas.Text = fun.TransformarEntero(ImporteCobranza.ToString().Replace(",", "."));
-                txtCobranzas.Text = fun.FormatoEnteroMiles(txtCobranzas.Text);
-                 
-                double ImporteBanco = Convert.ToDouble(trdo.Rows[0]["ImporteBanco"]);
-                txtBanco.Text = fun.TransformarEntero(ImporteBanco.ToString().Replace(",", "."));
-                txtBanco.Text = fun.FormatoEnteroMiles(txtBanco.Text);
+                    double ImportePrenda = Convert.ToDouble(trdo.Rows[0]["ImportePrenda"]);
+                    txtPrenda.Text = fun.TransformarEntero(ImportePrenda.ToString().Replace(",", "."));
+                    txtPrenda.Text = fun.FormatoEnteroMiles(txtPrenda.Text);
+
+                    double ImporteCobranza = Convert.ToDouble(trdo.Rows[0]["ImporteCobranza"]);
+                    txtCobranzas.Text = fun.TransformarEntero(ImporteCobranza.ToString().Replace(",", "."));
+                    txtCobranzas.Text = fun.FormatoEnteroMiles(txtCobranzas.Text);
+
+                    double ImporteBanco = Convert.ToDouble(trdo.Rows[0]["ImporteBanco"]);
+                    txtBanco.Text = fun.TransformarEntero(ImporteBanco.ToString().Replace(",", "."));
+                    txtBanco.Text = fun.FormatoEnteroMiles(txtBanco.Text);
+                }
+                
 
                 Clases.cComisionVendedor com = new Clases.cComisionVendedor();
                 txtComisiones.Text = com.GetComisionesPendientes().ToString();
@@ -90,7 +107,7 @@ namespace Concesionaria
                 txtCobranzas.Text = cob.GetTotalDeudaCobranzas().ToString ();
                 txtCobranzas.Text = fun.FormatoEnteroMiles(txtCobranzas.Text);
                 GetPrendas();
-                GetTotalVehiculo();
+                GetTotalVehiculo(CodMoneda);
                 GetTarjeta();
             }
             btnActualizar.Focus();
@@ -156,8 +173,9 @@ namespace Concesionaria
 
         private void GetEfectivosaPagar()
         {
+            Int32 CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
             Clases.cEfectivoaPagar eft = new Clases.cEfectivoaPagar();
-            txtEfectivosaPagar.Text = eft.TotalSaldo().ToString();
+            txtEfectivosaPagar.Text = eft.TotalSaldo(CodMoneda).ToString();
             Clases.cFunciones fun = new Clases.cFunciones();
             txtEfectivosaPagar.Text = fun.SepararDecimales(txtEfectivosaPagar.Text);
             txtEfectivosaPagar.Text = fun.FormatoEnteroMiles(txtEfectivosaPagar.Text); 
@@ -173,11 +191,11 @@ namespace Concesionaria
             txtPrenda.Text = fun.FormatoEnteroMiles(txtPrenda.Text);
         }
 
-        private void GetTotalVehiculo()
+        private void GetTotalVehiculo(int CodMoneda)
         { 
             Clases.cFunciones fun = new Clases.cFunciones();
             Clases.cStockAuto stock = new Clases.cStockAuto();
-            DataTable trdo = stock.GetStockDetalladosVigente("", null);
+            DataTable trdo = stock.GetStockDetalladosVigente("", null, CodMoneda);
             double Total = fun.TotalizarColumnaCondicion(trdo, "Costo", "Concesion", "0");
             txtVehículo.Text = Total.ToString();
             if (txtVehículo.Text != "")

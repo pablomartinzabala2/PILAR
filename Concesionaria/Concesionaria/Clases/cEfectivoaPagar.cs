@@ -8,9 +8,9 @@ namespace Concesionaria.Clases
 {
     public class cEfectivoaPagar
     {
-        public void Insertar(SqlConnection con, SqlTransaction Transaccion,DateTime Fecha,double Importe,Int32 CodCompra,Int32? CodCliente,Int32 CodAuto, int Cuota)
+        public void Insertar(SqlConnection con, SqlTransaction Transaccion,DateTime Fecha,double Importe,Int32 CodCompra,Int32? CodCliente,Int32 CodAuto, int Cuota, int CodMOneda)
         {
-            string sql = "insert into EfectivosaPagar(Fecha,Importe,Saldo,CodCompra,CodCliente,CodAuto,ImportePagado,Cuota)";
+            string sql = "insert into EfectivosaPagar(Fecha,Importe,Saldo,CodCompra,CodCliente,CodAuto,ImportePagado,Cuota,CodMoneda)";
             sql = sql + "values(" + "'" + Fecha.ToShortDateString () + "'";
             sql = sql + "," + Importe.ToString().Replace(",", ".");
             sql = sql + "," + Importe.ToString().Replace(",", ".");
@@ -22,6 +22,7 @@ namespace Concesionaria.Clases
             sql = sql + "," + CodAuto.ToString();
             sql = sql + ",0";
             sql = sql + "," + Cuota.ToString();
+            sql = sql + "," + CodMOneda.ToString();
             sql = sql + ")";
             SqlCommand comand = new SqlCommand();
             comand.Connection = con;
@@ -68,10 +69,11 @@ namespace Concesionaria.Clases
             cDb.ExecutarNonQuery (sql);
         }
 
-        public Double TotalSaldo()
+        public Double TotalSaldo(Int32 CodMoneda)
         {
             double Importe = 0;
             string sql = "select isnull(sum(Saldo),0) as Importe from EfectivosaPagar";
+            sql = sql + " where CodMoneda =" + CodMoneda.ToString();
             DataTable trdo = cDb.ExecuteDataTable(sql);
             if (trdo.Rows.Count > 0)
             {

@@ -61,11 +61,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtDocumentos = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.cmbMoneda = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmbMoneda);
             this.groupBox1.Controls.Add(this.txtTarjeta);
             this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.Controls.Add(this.txtEfectivosaPagar);
@@ -379,6 +381,15 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Documentos";
             // 
+            // cmbMoneda
+            // 
+            this.cmbMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMoneda.FormattingEnabled = true;
+            this.cmbMoneda.Location = new System.Drawing.Point(151, 6);
+            this.cmbMoneda.Name = "cmbMoneda";
+            this.cmbMoneda.Size = new System.Drawing.Size(136, 24);
+            this.cmbMoneda.TabIndex = 32;
+            // 
             // FrmInformeCuentas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -433,6 +444,6 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox txtTarjeta;
         private System.Windows.Forms.Label label15;
-
+        private System.Windows.Forms.ComboBox cmbMoneda;
     }
 }

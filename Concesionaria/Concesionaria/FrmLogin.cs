@@ -49,14 +49,14 @@ namespace Concesionaria
         }
 
         private void FrmLogin_Load(object sender, EventArgs e)
-        {  /* 
-            DateTime Vto = Convert.ToDateTime("10/08/2022");
+        {  
+            DateTime Vto = Convert.ToDateTime("12/12/2022");
             DateTime Fecha = DateTime.Now;
             if (Fecha > Vto)
             {
                 btnBuscarApe.Enabled = false;
             }
-            */
+            
         }
     }
 }

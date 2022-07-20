@@ -85,6 +85,18 @@ namespace Concesionaria.Clases
             return Total;
         }
 
+        public double GetTotalDeudaCobranzas(int CodMoneda)
+        {
+            string sql = "select sum(isnull(Saldo,0)) as total from cobranza ";
+            sql = sql + " where CodMoneda =" + CodMoneda.ToString();
+            double Total = 0;
+            DataTable trdo = cDb.ExecuteDataTable(sql);
+            if (trdo.Rows.Count > 0)
+                if (trdo.Rows[0]["Total"].ToString() != "")
+                    Total = Convert.ToDouble(trdo.Rows[0]["Total"].ToString());
+            return Total;
+        }
+
         public void PagarSaldo(Int32 CodCobranza,DateTime Fecha,double Importe)
         {
             string sql = "update cobranza set ";

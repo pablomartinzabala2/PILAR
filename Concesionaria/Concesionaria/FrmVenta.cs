@@ -119,6 +119,10 @@ namespace Concesionaria
             tbCobranza = new DataTable();
             string ColCob = "Cuota;Importe;FechaVencimiento;FechaPago;Saldo;CodCobranza";
             tbCobranza = fun.CrearTabla(ColCob);
+            DataTable tbMoneda = cDb.ExecuteDataTable("select * from moneda order by codmoneda");
+            fun.LlenarComboDatatable(cmbMoneda, tbMoneda, "Nombre", "CodMoneda");
+            if (cmbMoneda.Items.Count > 0)
+                cmbMoneda.SelectedIndex = 1;
         }
 
         private void txtPatente_TextChanged(object sender, EventArgs e)
@@ -718,6 +722,10 @@ namespace Concesionaria
             {
                 return;
             }
+            int CodMoneda = 0;
+            if (cmbMoneda.SelectedIndex > 0)
+                CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
+
             Clases.cVenta objVenta = new Clases.cVenta();
             double GastosTotalxAuto = objVenta.GetCostosTotalesxCodStock(Convert.ToInt32(txtCodStock.Text));
             SqlConnection con = new SqlConnection();
@@ -827,7 +835,7 @@ namespace Concesionaria
                         ImporteCuota = GrillaCuotas.Rows[i].Cells[1].Value.ToString();
                         FechaVecimiento = GrillaCuotas.Rows[i].Cells[2].Value.ToString();
                         ImporteSinInteres = GrillaCuotas.Rows[i].Cells[3].Value.ToString();
-                        sqlInsertCuota = "Insert into Cuotas(CodVenta,Cuota,Importe,FechaVencimiento,Saldo,ImporteSinInteres)";
+                        sqlInsertCuota = "Insert into Cuotas(CodVenta,Cuota,Importe,FechaVencimiento,Saldo,ImporteSinInteres,CodMoneda)";
                         sqlInsertCuota = sqlInsertCuota + " values (";
                         sqlInsertCuota = sqlInsertCuota + CodVenta.ToString();
                         sqlInsertCuota = sqlInsertCuota + "," + Cuota;
@@ -835,6 +843,7 @@ namespace Concesionaria
                         sqlInsertCuota = sqlInsertCuota + "," + "'" + FechaVecimiento + "'";
                         sqlInsertCuota = sqlInsertCuota + "," + ImporteCuota;
                         sqlInsertCuota = sqlInsertCuota + "," + ImporteSinInteres;
+                        sqlInsertCuota = sqlInsertCuota + "," + CodMoneda.ToString();
                         sqlInsertCuota = sqlInsertCuota + ")";
                         SqlCommand comandCuota = new SqlCommand();
                         comandCuota.Connection = con;
@@ -877,7 +886,7 @@ namespace Concesionaria
                 {
                     if (txtTotalPrenda.Text != "0")
                     {
-                        GrabarPrenda(Convert.ToInt32(CodVenta), con, Transaccion);
+                        GrabarPrenda(Convert.ToInt32(CodVenta), con, Transaccion, CodMoneda);
                         /*
                         SqlCommand ComandPrenda = new SqlCommand();
                         ComandPrenda.Connection = con;
@@ -975,7 +984,7 @@ namespace Concesionaria
                             ImporteCobranzaCuota = fun.ToDouble(tbCobranza.Rows[kk]["Importe"].ToString ());
                             Cuota = tbCobranza.Rows[kk]["Cuota"].ToString();
                             //agregar la cuota en la tabla cobranza
-                            sqlCobranza = "Insert into Cobranza(CodVenta,Importe,Fecha,CodAuto,CodCliente,FechaCompromiso,ImportePagado,Saldo,Cuota)";
+                            sqlCobranza = "Insert into Cobranza(CodVenta,Importe,Fecha,CodAuto,CodCliente,FechaCompromiso,ImportePagado,Saldo,Cuota,CodMoneda)";
                             sqlCobranza = sqlCobranza + " values (" + CodVenta.ToString();
                             sqlCobranza = sqlCobranza + "," + ImporteCobranzaCuota.ToString();
                             sqlCobranza = sqlCobranza + "," + "'" + txtFecha.Text + "'";
@@ -985,6 +994,7 @@ namespace Concesionaria
                             sqlCobranza = sqlCobranza + ",0";
                             sqlCobranza = sqlCobranza + "," + ImporteCobranzaCuota.ToString();
                             sqlCobranza = sqlCobranza + "," + Cuota.ToString();
+                            sqlCobranza = sqlCobranza + "," + CodMoneda.ToString();
                             sqlCobranza = sqlCobranza + ")";
                             SqlCommand ComandCobranza = new SqlCommand();
                             ComandCobranza.Connection = con;
@@ -1285,6 +1295,9 @@ namespace Concesionaria
             double ImporteCobranza = 0;
             double ImporteBanco = 0;
             double PrecioSenia = 0;
+            int CodMoneda = 0;
+            if (cmbMoneda.SelectedIndex > 0)
+                CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
 
             Clases.cFunciones fun = new Clases.cFunciones();
             if (txtPrecioVenta.Text != "")
@@ -1317,7 +1330,7 @@ namespace Concesionaria
             //Principal.CodUsuarioLogueado 
             sql = "insert into Venta(Fecha,CodUsuario,CodCliente";
             sql = sql + ",CodAutoVendido,CodAutoPartePago,ImporteVenta,";
-            sql = sql + "ImporteAutoPartePago,ImporteCredito,ImporteEfectivo,ImportePrenda,ImporteCobranza,ImporteBanco,CodVendedor,CodStock,PrecioSenia)";
+            sql = sql + "ImporteAutoPartePago,ImporteCredito,ImporteEfectivo,ImportePrenda,ImporteCobranza,ImporteBanco,CodVendedor,CodStock,PrecioSenia,CodMoneda)";
             sql = sql + "values(" + "'" + Fecha.ToShortDateString() + "'";
             sql = sql + "," + Principal.CodUsuarioLogueado.ToString();
             sql = sql + "," + CodCliente.ToString();
@@ -1336,6 +1349,7 @@ namespace Concesionaria
             sql = sql + "," + CodVendedor.ToString();
             sql = sql + "," + CodStock.ToString();
             sql = sql + "," + PrecioSenia.ToString();
+            sql = sql + "," + CodMoneda.ToString();
             sql = sql + ")";
             return sql;
         }
@@ -1410,6 +1424,9 @@ namespace Concesionaria
             double ImportePrenda = 0;
             double ImporteCobranza = 0;
             double ImporteBanco = 0;
+            int CodMoneda = 0;
+            if (cmbMoneda.SelectedIndex > 0)
+                CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
 
             Clases.cFunciones fun = new Clases.cFunciones();
 
@@ -1444,7 +1461,7 @@ namespace Concesionaria
 
             //Principal.CodUsuarioLogueado 
             sql = "insert into Movimiento(Fecha,CodUsuario";
-            sql = sql + ",ImporteEfectivo,ImporteDocumento,ImportePrenda,ImporteAuto,CodVenta,ImporteCobranza,ImporteBanco,Descripcion)";
+            sql = sql + ",ImporteEfectivo,ImporteDocumento,ImportePrenda,ImporteAuto,CodVenta,ImporteCobranza,ImporteBanco,Descripcion,CodMoneda)";
             sql = sql + "values(" + "'" + Fecha + "'";
             sql = sql + "," + Principal.CodUsuarioLogueado.ToString();
             sql = sql + "," + ImporteEfectivo.ToString();
@@ -1455,6 +1472,7 @@ namespace Concesionaria
             sql = sql + "," + ImporteCobranza.ToString();
             sql = sql + "," + ImporteBanco.ToString();
             sql = sql + "," + "'" + Descripcion + "'";
+            sql = sql + "," + CodMoneda.ToString();
             sql = sql + ")";
             return sql;
         }
@@ -1601,6 +1619,13 @@ namespace Concesionaria
                     }
                 }
             }
+
+            if (cmbMoneda.SelectedIndex <1)
+            {
+                MessageBox.Show("Debe seleccionar una moneda para continuar para continuar", Clases.cMensaje.Mensaje());
+                return false;
+            }
+
             if (CmbVendedor.SelectedIndex < 1)
             {
                 MessageBox.Show("Debe ingresar un vendedor ", Clases.cMensaje.Mensaje());
@@ -4247,7 +4272,7 @@ namespace Concesionaria
             CalcularSubTotal();
         }
 
-        private void GrabarPrenda(Int32 CodVenta,SqlConnection con,SqlTransaction Transaccion)
+        private void GrabarPrenda(Int32 CodVenta,SqlConnection con,SqlTransaction Transaccion,int CodMoneda)
         {
             Clases.cFunciones fun = new Clases.cFunciones();
             for (int i = 0; i < tprenda.Rows.Count; i++)
@@ -4256,7 +4281,7 @@ namespace Concesionaria
                 string CodCliente = txtCodCLiente.Text;
                 double Importe =fun.ToDouble (tprenda.Rows[i][3].ToString());
                 string FechaVencimiento = tprenda.Rows[i]["FechaVencimiento"].ToString();
-                string sql = "Insert into Prenda(CodVenta,Importe,CodCliente,CodEntidad,Fecha,CodAuto,Saldo,Diferencia,FechaVencimiento)";
+                string sql = "Insert into Prenda(CodVenta,Importe,CodCliente,CodEntidad,Fecha,CodAuto,Saldo,Diferencia,FechaVencimiento,CodMoneda)";
                 sql = sql + "Values (" + CodVenta.ToString();
                 sql = sql + "," + Importe.ToString();
                 sql = sql + "," + CodCliente.ToString();
@@ -4266,6 +4291,7 @@ namespace Concesionaria
                 sql = sql + "," + Importe.ToString();
                 sql = sql + ",0";
                 sql = sql + "," + "'" + FechaVencimiento + "'";
+                sql = sql + "," + CodMoneda.ToString();
                 sql = sql + ")";
                 SqlCommand ComandPrenda = new SqlCommand();
                 ComandPrenda.Connection = con;

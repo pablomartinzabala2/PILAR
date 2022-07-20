@@ -89,12 +89,13 @@ namespace Concesionaria.Clases
             return cDb.ExecuteDataTable(sql);
         }
 
-        public double GetTotalPrenda()
+        public double GetTotalPrenda(int CodMoneda)
         {
             double Importe = 0;
             string sql = "select sum(p.Saldo) as Importe";
             sql = sql + " from Prenda p,auto a ";
             sql = sql + " where p.CodAuto = a.CodAuto";
+            sql = sql + " and CodMoneda=" + CodMoneda.ToString();
             DataTable trdo = cDb.ExecuteDataTable(sql);
             if (trdo.Rows.Count > 0)
             {

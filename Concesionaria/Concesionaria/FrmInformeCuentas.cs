@@ -48,10 +48,10 @@ namespace Concesionaria
             Double ImporteCheque = cheque.GetTotalChequesaCobrar();
             Clases.cChequeCobrar chequeCob = new Clases.cChequeCobrar();
             ImporteCheque = ImporteCheque + chequeCob.GetTotalChequesaCobrar();
-            Double Importe = cuota.GetMontoCuotasImpagas();
+            Double Importe = cuota.GetMontoCuotasImpagas(CodMoneda);
             Double ImporteCuotasAnteriores = cuotasAnt.GetMontoCuotasImpagas();
             Importe = Importe + ImporteCuotasAnteriores;
-            Double ImporteSinInteres = cuota.GetMontoCuotasImpagasSinInteres();
+            Double ImporteSinInteres = cuota.GetMontoCuotasImpagasSinInteres(CodMoneda);
             double ImporteSinInteresCuotasAnt = cuotasAnt.GetMontoCuotasImpagasSinInteres();
             ImporteSinInteres = ImporteSinInteres + ImporteSinInteresCuotasAnt;
             txtDocumentos.Text = fun.TransformarEntero(Importe.ToString().Replace(",", "."));
@@ -112,9 +112,9 @@ namespace Concesionaria
                 }
 
                 Clases.cCobranza cob = new Clases.cCobranza();
-                txtCobranzas.Text = cob.GetTotalDeudaCobranzas().ToString ();
+                txtCobranzas.Text = cob.GetTotalDeudaCobranzas(CodMoneda).ToString ();
                 txtCobranzas.Text = fun.FormatoEnteroMiles(txtCobranzas.Text);
-                GetPrendas();
+                GetPrendas(CodMoneda);
                 GetTotalVehiculo(CodMoneda);
                 GetTarjeta();
             
@@ -189,10 +189,10 @@ namespace Concesionaria
             txtEfectivosaPagar.Text = fun.FormatoEnteroMiles(txtEfectivosaPagar.Text); 
         }
 
-        private void GetPrendas()
+        private void GetPrendas(int CodMoneda)
         {
             Clases.cPrenda prenda = new Clases.cPrenda();
-            double Importe = prenda.GetTotalPrenda();
+            double Importe = prenda.GetTotalPrenda(CodMoneda);
             txtPrenda.Text = Importe.ToString();
             Clases.cFunciones fun = new Clases.cFunciones();
             txtPrenda.Text = fun.SepararDecimales(txtPrenda.Text);

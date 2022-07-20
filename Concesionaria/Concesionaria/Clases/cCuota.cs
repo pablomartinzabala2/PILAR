@@ -22,11 +22,40 @@ namespace Concesionaria.Clases
             return Importe;
         }
 
+        public Double GetMontoCuotasImpagas(int CodMoneda)
+        {
+            cFunciones fun = new cFunciones();
+            string sql = "select isnull(sum(Saldo),0) as Importe from Cuotas";
+            sql = sql + " where CodMoneda =" + CodMoneda.ToString();
+            DataTable trdo = cDb.ExecuteDataTable(sql);
+            Double Importe = 0;
+            if (trdo.Rows.Count > 0)
+            {
+                Importe = Convert.ToDouble(trdo.Rows[0]["Importe"].ToString());
+            }
+            return Importe;
+        }
+
         public Double GetMontoCuotasImpagasSinInteres()
         {
             cFunciones fun = new cFunciones();
             string sql = "select isnull(sum(ImporteSinInteres),0) as ImporteSinInteres from Cuotas";
             sql = sql + " where FechaPago is null";
+            DataTable trdo = cDb.ExecuteDataTable(sql);
+            Double Importe = 0;
+            if (trdo.Rows.Count > 0)
+            {
+                Importe = Convert.ToDouble(trdo.Rows[0]["ImporteSinInteres"].ToString());
+            }
+            return Importe;
+        }
+
+        public Double GetMontoCuotasImpagasSinInteres(int CodMoneda)
+        {
+            cFunciones fun = new cFunciones();
+            string sql = "select isnull(sum(ImporteSinInteres),0) as ImporteSinInteres from Cuotas";
+            sql = sql + " where FechaPago is null";
+            sql = sql + " and CodMoneda=" + CodMoneda.ToString();
             DataTable trdo = cDb.ExecuteDataTable(sql);
             Double Importe = 0;
             if (trdo.Rows.Count > 0)

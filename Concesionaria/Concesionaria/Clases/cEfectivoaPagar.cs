@@ -97,6 +97,13 @@ namespace Concesionaria.Clases
             string sql = "select * from EfectivosaPagar where CodCompra=" + CodCompra.ToString();
             return cDb.ExecuteDataTable(sql);
         }
+
+        public void BorrarEfectivoaPagar(SqlConnection con, SqlTransaction Transaccion, int CodCompra)
+        {
+            string sql = "delete from EfectivosaPagar ";
+            sql = sql + " where CodCompra = " + CodCompra.ToString();
+            cDb.EjecutarNonQueryTransaccion(con, Transaccion, sql);
+        }
     }
 }
 

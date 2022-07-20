@@ -121,6 +121,7 @@ namespace Concesionaria
             Int32 CodStockEntrada = 0;
             Int32? CodStockSalida = null;
             string Patente = "";
+            int CodMoneda = 0;
             cCompra compra = new cCompra();
             DataTable trdo = compra.GetCompraxCodigo(Convert.ToInt32 (CodCompra));
             DateTime Fecha = DateTime.Now;
@@ -145,6 +146,7 @@ namespace Concesionaria
                 Patente = trdo.Rows[0]["Patente"].ToString();
                 Descripcion = "Anulación Compra , Patente " + Patente;
             }
+            cEfectivoaPagar eft = new cEfectivoaPagar();
             cStockAuto stock = new cStockAuto();
             cChequesaPagar cheque = new cChequesaPagar();
             SqlConnection con = new SqlConnection();
@@ -155,15 +157,17 @@ namespace Concesionaria
             Transaccion = con.BeginTransaction();
             try
             {
+                CodMoneda = compra.GetCodMoneda(con, Transaccion, CodCompra);
                 compra.AnularCompra(con, Transaccion,Convert.ToInt32 (CodCompra));
                 stock.InsertarBajaStockTran(con, Transaccion, CodStockEntrada, DateTime.Now);
                 if (CodStockSalida !=null)
                 {
                     stock.InsertarAltaStockTran(con, Transaccion, Convert.ToInt32 (CodStockSalida));
                 }
-                if (ImporteEfectivo >0)
-                    mov.RegistrarMovimientoDescripcionTransaccion(con, Transaccion, 0, Principal.CodUsuarioLogueado, ImporteEfectivo, 0, 0, 0, 0, Fecha,Descripcion , CodCompra);
+                if (ImporteEfectivo > 0)
+                    mov.RegistrarMovimientoDescripcionTransaccion(con, Transaccion, 0, Principal.CodUsuarioLogueado, ImporteEfectivo, 0, 0, 0, 0, Fecha, Descripcion, CodCompra, CodMoneda);
                 cheque.BorrarChequesaPagar(con, Transaccion, Convert.ToInt32(CodCompra));
+                eft.BorrarEfectivoaPagar(con, Transaccion, CodCompra);
                 Transaccion.Commit();
                 con.Close();
                 MessageBox.Show("Datos anulados correctamente", Clases.cMensaje.Mensaje());

@@ -54,6 +54,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtPunitorio = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.btnPagarTodasCuotas = new System.Windows.Forms.Button();
             this.btnDetalle = new System.Windows.Forms.Button();
             this.btnPagarSaldo = new System.Windows.Forms.Button();
@@ -74,8 +76,7 @@
             this.txtCodVenta = new System.Windows.Forms.TextBox();
             this.btnGrabar = new System.Windows.Forms.Button();
             this.btnAnular = new System.Windows.Forms.Button();
-            this.label17 = new System.Windows.Forms.Label();
-            this.txtPunitorio = new System.Windows.Forms.TextBox();
+            this.cmbMoneda = new System.Windows.Forms.ComboBox();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GrillaCuotas)).BeginInit();
@@ -334,6 +335,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cmbMoneda);
             this.groupBox1.Controls.Add(this.txtPunitorio);
             this.groupBox1.Controls.Add(this.label17);
             this.groupBox1.Controls.Add(this.btnPagarTodasCuotas);
@@ -361,6 +363,25 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Información de documentos";
             // 
+            // txtPunitorio
+            // 
+            this.txtPunitorio.BackColor = System.Drawing.SystemColors.Control;
+            this.txtPunitorio.Location = new System.Drawing.Point(706, 308);
+            this.txtPunitorio.Name = "txtPunitorio";
+            this.txtPunitorio.Size = new System.Drawing.Size(100, 23);
+            this.txtPunitorio.TabIndex = 64;
+            this.txtPunitorio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPunitorio_KeyPress);
+            this.txtPunitorio.Leave += new System.EventHandler(this.txtPunitorio_Leave);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(637, 310);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(64, 17);
+            this.label17.TabIndex = 63;
+            this.label17.Text = "Punitorio";
+            // 
             // btnPagarTodasCuotas
             // 
             this.btnPagarTodasCuotas.Image = global::Concesionaria.Properties.Resources.disk;
@@ -384,7 +405,7 @@
             // btnPagarSaldo
             // 
             this.btnPagarSaldo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPagarSaldo.Location = new System.Drawing.Point(705, 340);
+            this.btnPagarSaldo.Location = new System.Drawing.Point(714, 356);
             this.btnPagarSaldo.Name = "btnPagarSaldo";
             this.btnPagarSaldo.Size = new System.Drawing.Size(92, 36);
             this.btnPagarSaldo.TabIndex = 42;
@@ -555,24 +576,14 @@
             this.btnAnular.UseVisualStyleBackColor = true;
             this.btnAnular.Click += new System.EventHandler(this.btnAnular_Click);
             // 
-            // label17
+            // cmbMoneda
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(637, 310);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(64, 17);
-            this.label17.TabIndex = 63;
-            this.label17.Text = "Punitorio";
-            // 
-            // txtPunitorio
-            // 
-            this.txtPunitorio.BackColor = System.Drawing.SystemColors.Control;
-            this.txtPunitorio.Location = new System.Drawing.Point(706, 308);
-            this.txtPunitorio.Name = "txtPunitorio";
-            this.txtPunitorio.Size = new System.Drawing.Size(100, 23);
-            this.txtPunitorio.TabIndex = 64;
-            this.txtPunitorio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPunitorio_KeyPress);
-            this.txtPunitorio.Leave += new System.EventHandler(this.txtPunitorio_Leave);
+            this.cmbMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMoneda.FormattingEnabled = true;
+            this.cmbMoneda.Location = new System.Drawing.Point(705, 337);
+            this.cmbMoneda.Name = "cmbMoneda";
+            this.cmbMoneda.Size = new System.Drawing.Size(100, 24);
+            this.cmbMoneda.TabIndex = 65;
             // 
             // FrmCobroCuotas
             // 
@@ -652,5 +663,6 @@
         private System.Windows.Forms.Button btnPagarTodasCuotas;
         private System.Windows.Forms.TextBox txtPunitorio;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ComboBox cmbMoneda;
     }
 }

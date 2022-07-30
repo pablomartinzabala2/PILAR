@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using Concesionaria.Clases;
 namespace Concesionaria
 {
     public partial class FrmCobroCuotas : Form
@@ -34,6 +34,10 @@ namespace Concesionaria
                 cmbDocumento.SelectedIndex = 1;
             fun.LlenarCombo(CmbBarrio, "Barrio", "Nombre", "CodBarrio");
             PintarFormulario();
+            DataTable tbMoneda = cDb.ExecuteDataTable("select * from moneda order by codmoneda");
+            fun.LlenarComboDatatable(cmbMoneda, tbMoneda, "Nombre", "CodMoneda");
+            if (cmbMoneda.Items.Count > 0)
+                cmbMoneda.SelectedIndex = 1;
         }
 
         private void txtNroDoc_TextChanged(object sender, EventArgs e)
@@ -154,6 +158,7 @@ namespace Concesionaria
             string CodVenta = GrillaCuotas.CurrentRow.Cells[0].Value.ToString();
             string sSaldo = GrillaCuotas.CurrentRow.Cells[6].Value.ToString();
             string FechaPago = GrillaCuotas.CurrentRow.Cells[4].Value.ToString();
+            string CodMoneda = GrillaCuotas.CurrentRow.Cells[7].Value.ToString();
             GetPunitorio(Convert.ToInt32(CodVenta), Convert.ToInt32(Cuota));
             Clases.cFunciones fun = new Clases.cFunciones();
             
@@ -163,13 +168,15 @@ namespace Concesionaria
                 txtImporte.Text = Importe;
                 txtImportePagado.Text = ImportePagado;
                 txtFecha.Text = Fecha;
-                txtSaldo.Text = sSaldo.ToString(); 
+                txtSaldo.Text = sSaldo.ToString();
+                cmbMoneda.SelectedValue = CodMoneda;
                 if (txtImporte.Text != "")
                 {
                     //string xx = trdo.Rows[0]["Importe"].ToString().Replace (",",".").ToString();
                    //txtImporte.Text = fun.TransformarEntero(Importe);
                     txtImporte.Text = fun.FormatoEnteroMiles(txtImporte.Text);
                     txtCodVenta.Text = CodVenta.ToString();
+
                     if (txtImportePagado.Text != "")
                     {
                         btnAnular.Enabled = true;
@@ -186,6 +193,7 @@ namespace Concesionaria
                         btnGrabar.Enabled = true;
                         txtImportePagado.ReadOnly = false; 
                     }
+
                 }
                //obtengo la deuda total 
                 Clases.cCuota objCuota = new Clases.cCuota ();
@@ -302,10 +310,11 @@ namespace Concesionaria
                 Punitorio = fun.ToDouble(txtPunitorio.Text);
             Int32 CodVenta = Convert.ToInt32(txtCodVenta.Text);
             Int32 Cuota = Convert.ToInt32(txtCuota.Text);
+            int CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
             DateTime FechaPago = Convert.ToDateTime(txtFecha.Text);
             Saldo = Importe - ImportePagado;
             Clases.cCuota objCuota = new Clases.cCuota();
-            if (objCuota.GrabarCuota(CodVenta, Cuota, FechaPago, ImportePagado, Saldo, CodUsuario,txtPatente.Text,Punitorio))
+            if (objCuota.GrabarCuota(CodVenta, Cuota, FechaPago, ImportePagado, Saldo, CodUsuario,txtPatente.Text,Punitorio,CodMoneda))
             {
                 MessageBox.Show("Cuota grabada correctamente.", Clases.cMensaje.Mensaje());
                 CargarPlandeCuotas(Convert.ToInt32(CodVenta));

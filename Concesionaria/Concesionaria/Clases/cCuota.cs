@@ -67,12 +67,15 @@ namespace Concesionaria.Clases
 
         public DataTable GetCuotasxCodVenta(Int32 CodVenta)
         {
-            string sql ="select CodVenta,Cuota,FechaVencimiento,Importe,FechaPago,ImportePagado,Saldo from cuotas where CodVenta =" + CodVenta.ToString ();
+            string sql = "select c.CodVenta,c.Cuota,c.FechaVencimiento,c.Importe,c.FechaPago,c.ImportePagado,c.Saldo,c.CodMoneda,";
+            sql = sql + " (select m.Nombre from Moneda m where m.CodMoneda = c.CodMoneda) as Moneda";
+            sql = sql + " from cuotas c where CodVenta =" + CodVenta.ToString();
+           // string sql ="select CodVenta,Cuota,FechaVencimiento,Importe,FechaPago,ImportePagado,Saldo,CodMoneda from cuotas where CodVenta =" + CodVenta.ToString ();
             DataTable tventa = cDb.ExecuteDataTable(sql);
             return tventa;
         }
 
-        public Boolean  GrabarCuota(Int32 CodVenta, Int32 Cuota, DateTime FechaPago, double ImportePagado,double Saldo,Int32 CodUsuario,string Patente,Double Punitorio)
+        public Boolean  GrabarCuota(Int32 CodVenta, Int32 Cuota, DateTime FechaPago, double ImportePagado,double Saldo,Int32 CodUsuario,string Patente,Double Punitorio, int CodMoneda)
         {
             string sql ="update Cuotas";
             sql = sql + " set ImportePagado =" + ImportePagado.ToString ().Replace (",",".");
@@ -99,12 +102,13 @@ namespace Concesionaria.Clases
                 Comand.ExecuteNonQuery();
                 //grabo el movimiento
                 string sqlMov = "Insert into Movimiento(Fecha,CodUsuario,ImporteEfectivo";
-                sqlMov = sqlMov + ",ImporteDocumento,ImportePrenda,ImporteAuto,Descripcion)";
+                sqlMov = sqlMov + ",ImporteDocumento,ImportePrenda,ImporteAuto,Descripcion,CodMoneda)";
                 sqlMov = sqlMov + "values(" + "'" + FechaPago.ToShortDateString () + "'";
                 sqlMov = sqlMov + "," + CodUsuario.ToString();
                 sqlMov = sqlMov + "," + ImportePagado.ToString();
                 sqlMov = sqlMov + ",0,0,0";
                 sqlMov = sqlMov + "," + "'" + Descripcion + "'";
+                sqlMov = sqlMov + "," + CodMoneda.ToString();
                 sqlMov = sqlMov + ")";
 
                 Command2.Transaction = Transaccion;

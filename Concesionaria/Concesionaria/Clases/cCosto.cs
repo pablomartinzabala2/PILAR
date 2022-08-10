@@ -10,11 +10,11 @@ namespace Concesionaria.Clases
 {
     public class cCosto
     {
-        public void InsertarCosto(Int32 CodAuto,string Patente,Double? Importe,string Fecha,string Descripcion, Int32? CodStock )
+        public void InsertarCosto(Int32 CodAuto,string Patente,Double? Importe,string Fecha,string Descripcion, Int32? CodStock, int CodMoneda )
         {
             string sql = "";
             sql = "Insert into Costo(CodAuto,Patente,";
-            sql = sql + "Importe,Fecha,Descripcion,CodStock)";
+            sql = sql + "Importe,Fecha,Descripcion,CodStock,CodMoneda)";
             sql = sql + "values(" + CodAuto.ToString ();
             sql = sql + "," + "'" + Patente  +"'";
             if (Importe ==null)
@@ -26,7 +26,8 @@ namespace Concesionaria.Clases
             if (CodStock == null)
                 sql = sql + ",null";
             else
-                sql = sql + "," + CodStock.ToString(); 
+                sql = sql + "," + CodStock.ToString();
+            sql = sql + "," + CodMoneda.ToString();
             sql = sql + ")";
             cDb.ExecutarNonQuery(sql);
         }

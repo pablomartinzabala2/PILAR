@@ -939,7 +939,7 @@ namespace Concesionaria
                     ComandRecepcion.CommandText = sqlGastosRecepcion;
                     ComandRecepcion.ExecuteNonQuery();
                 }
-
+                
                 if (txtTotalCheque.Text != "")
                 {
                     if (txtTotalCheque.Text != "0")
@@ -948,7 +948,7 @@ namespace Concesionaria
                         for (int j = 0; j < GrillaCheques.Rows.Count - 1; j++)
                         {
                             string sImporteCheque = GrillaCheques.Rows[j].Cells[1].Value.ToString();
-                            string sqlCheque = "insert into Cheque(CodVenta,NroCheque,Importe,Fecha,FechaVencimiento,CodCliente,CodBanco)";
+                            string sqlCheque = "insert into Cheque(CodVenta,NroCheque,Importe,Fecha,FechaVencimiento,CodCliente,CodBanco,CodMoneda)";
                             sqlCheque = sqlCheque + "values (" + CodVenta.ToString();
                             sqlCheque = sqlCheque + "," + "'" + GrillaCheques.Rows[j].Cells[0].Value.ToString() + "'";
                             sqlCheque = sqlCheque + "," + fun.ToDouble(sImporteCheque);
@@ -956,6 +956,7 @@ namespace Concesionaria
                             sqlCheque = sqlCheque + "," + "'" + GrillaCheques.Rows[j].Cells[2].Value.ToString() + "'";
                             sqlCheque = sqlCheque + "," + txtCodCLiente.Text;
                             sqlCheque = sqlCheque + "," + CmbBanco.SelectedValue;
+                            sqlCheque = sqlCheque + "," + CodMoneda.ToString(); 
                             sqlCheque = sqlCheque + ")";
 
                             SqlCommand ComandCheque = new SqlCommand();
@@ -1087,7 +1088,7 @@ namespace Concesionaria
                 SqlCommand comandMovimientoAuto = new SqlCommand();
                 comandMovimientoAuto.Connection = con;
                 comandMovimientoAuto.Transaction = Transaccion;
-                comandMovimientoAuto.CommandText = GetSqlMovimientosAutoVendido(Convert.ToInt32(CodVenta), GastosTotalxAuto);
+                comandMovimientoAuto.CommandText = GetSqlMovimientosAutoVendido(Convert.ToInt32(CodVenta), GastosTotalxAuto, Convert.ToInt32(cmbMoneda.SelectedValue));
                 comandMovimientoAuto.ExecuteNonQuery();
 
                 if (txtComisionVendedor.Text != "")
@@ -1127,11 +1128,12 @@ namespace Concesionaria
                         Int32 CodTarjeta = Convert.ToInt32(GrillaTarjeta.Rows[i].Cells[0].Value.ToString());
                         Double ImporteTarjeta =func.ToDouble (GrillaTarjeta.Rows[i].Cells[2].Value.ToString());
                         sqlTar = "Insert into ventaxtarjeta(CodVenta";
-                        sqlTar = sqlTar + ",CodTarjeta,Importe,Saldo)";
+                        sqlTar = sqlTar + ",CodTarjeta,Importe,Saldo,CodMoneda)";
                         sqlTar = sqlTar + " Values(" + CodVenta.ToString();
                         sqlTar = sqlTar + "," + CodTarjeta.ToString();
                         sqlTar = sqlTar + "," + ImporteTarjeta.ToString().Replace(",", ".");
                         sqlTar = sqlTar + "," + ImporteTarjeta.ToString().Replace(",", ".");
+                        sqlTar = sqlTar + "," + CodMoneda.ToString();
                         sqlTar = sqlTar + ")";
                         SqlCommand comandTarjeta = new SqlCommand();
                         comandTarjeta.Connection = con;
@@ -2925,7 +2927,7 @@ namespace Concesionaria
             GrillaCheques.DataSource = tbCheques;
         }
 
-        private string GetSqlMovimientosAutoVendido(Int32 CodVenta, double GastosTotales)
+        private string GetSqlMovimientosAutoVendido(Int32 CodVenta, double GastosTotales,int CodMoneda)
         {
             string sql = "";
             string Fecha = DateTime.Now.ToShortDateString();
@@ -2945,7 +2947,7 @@ namespace Concesionaria
 
             //Principal.CodUsuarioLogueado 
             sql = "insert into Movimiento(Fecha,CodUsuario";
-            sql = sql + ",ImporteEfectivo,ImporteDocumento,ImportePrenda,ImporteAuto,CodVenta,ImporteCobranza,ImporteBanco,Descripcion)";
+            sql = sql + ",ImporteEfectivo,ImporteDocumento,ImportePrenda,ImporteAuto,CodVenta,ImporteCobranza,ImporteBanco,Descripcion,CodMoneda)";
             sql = sql + "values(" + "'" + Fecha + "'";
             sql = sql + "," + Principal.CodUsuarioLogueado.ToString();
             sql = sql + "," + ImporteEfectivo.ToString();
@@ -2956,6 +2958,7 @@ namespace Concesionaria
             sql = sql + "," + ImporteCobranza.ToString();
             sql = sql + "," + ImporteBanco.ToString();
             sql = sql + "," + "'" + Descripcion + "'";
+            sql = sql + "," + CodMoneda.ToString();
             sql = sql + ")";
             return sql;
         }

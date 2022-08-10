@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using Concesionaria.Clases;
 namespace Concesionaria
 {
     public partial class FrmCosto : Form
@@ -104,6 +104,10 @@ namespace Concesionaria
             string FechaCorta = DateTime.Now.ToShortDateString();
             txtFecha.Text = FechaCorta;
             fun.LlenarCombo(CmbGastoRecepcion, "CategoriaGastoRecepcion", "Descripcion", "Codigo");
+            DataTable tbMoneda = cDb.ExecuteDataTable("select * from moneda order by codmoneda");
+            fun.LlenarComboDatatable(cmbMoneda, tbMoneda, "Nombre", "CodMoneda");
+            if (cmbMoneda.Items.Count > 0)
+                cmbMoneda.SelectedIndex = 1;
         }
 
         private void FrmCosto_Load(object sender, EventArgs e)
@@ -184,14 +188,16 @@ namespace Concesionaria
             Int32? CodStock = -1;
             if (txtCodStock.Text != "")
                 CodStock = Convert.ToInt32(txtCodStock.Text);
-
+            int CodMoneda = 0;
+            if (cmbMoneda.SelectedIndex > 0)
+                CodMoneda = Convert.ToInt32(cmbMoneda.SelectedValue);
             Clases.cCosto costo = new Clases.cCosto();
-            costo.InsertarCosto(CodAuto, Patente, Importe, Fecha, Descripcion.ToUpper () , CodStock);
+            costo.InsertarCosto(CodAuto, Patente, Importe, Fecha, Descripcion.ToUpper(), CodStock, CodMoneda);
             CargarCostoxstock(Convert.ToInt32 (CodStock));
             DateTime FechaCosto = Convert.ToDateTime(txtFecha.Text);
 
             Clases.cMovimiento mov = new Clases.cMovimiento();
-            mov.RegistrarMovimientoDescripcion(-1, Principal.CodUsuarioLogueado, (-1) * (Importe), 0, 0, Importe, 0, FechaCosto,Descripcion.ToUpper ());
+            mov.RegistrarMovimientoDescripcion(-1, Principal.CodUsuarioLogueado, (-1) * (Importe), 0, 0, Importe, 0, FechaCosto, Descripcion.ToUpper(), CodMoneda);
             txtCosto.Text = "";
             txtDescripcionCosto.Text = "";
             txtCodCosto.Text = "";
@@ -432,6 +438,16 @@ namespace Concesionaria
             Clases.cGasto gasto2 = new Clases.cGasto();
             DataTable tgasto = gasto2.GetGastosRecepcionxCodStock2(Convert.ToInt32(txtCodStock.Text));
             GrillaGastosRecepcion.DataSource = tgasto;
+        }
+
+        private void cmbMoneda_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

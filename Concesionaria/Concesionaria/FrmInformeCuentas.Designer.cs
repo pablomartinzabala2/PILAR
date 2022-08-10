@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cmbMoneda = new System.Windows.Forms.ComboBox();
             this.txtTarjeta = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.txtEfectivosaPagar = new System.Windows.Forms.TextBox();
@@ -61,7 +62,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtDocumentos = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.cmbMoneda = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,6 +108,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Resumen de cuentas";
             // 
+            // cmbMoneda
+            // 
+            this.cmbMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMoneda.FormattingEnabled = true;
+            this.cmbMoneda.Location = new System.Drawing.Point(151, 6);
+            this.cmbMoneda.Name = "cmbMoneda";
+            this.cmbMoneda.Size = new System.Drawing.Size(136, 24);
+            this.cmbMoneda.TabIndex = 32;
+            // 
             // txtTarjeta
             // 
             this.txtTarjeta.Location = new System.Drawing.Point(151, 295);
@@ -119,7 +128,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(32, 295);
+            this.label15.Location = new System.Drawing.Point(28, 295);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(53, 17);
             this.label15.TabIndex = 30;
@@ -380,15 +389,6 @@
             this.label1.Size = new System.Drawing.Size(87, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Documentos";
-            // 
-            // cmbMoneda
-            // 
-            this.cmbMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMoneda.FormattingEnabled = true;
-            this.cmbMoneda.Location = new System.Drawing.Point(151, 6);
-            this.cmbMoneda.Name = "cmbMoneda";
-            this.cmbMoneda.Size = new System.Drawing.Size(136, 24);
-            this.cmbMoneda.TabIndex = 32;
             // 
             // FrmInformeCuentas
             // 

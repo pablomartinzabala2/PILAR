@@ -73,6 +73,8 @@
             this.CmbGastoRecepcion = new System.Windows.Forms.ComboBox();
             this.label40 = new System.Windows.Forms.Label();
             this.btnAgregarGastodeRecepcion = new System.Windows.Forms.Button();
+            this.cmbMoneda = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -297,6 +299,8 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.tabPage1.Controls.Add(this.label10);
+            this.tabPage1.Controls.Add(this.cmbMoneda);
             this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.txtTotalGeneral);
             this.tabPage1.Controls.Add(this.txtCosto);
@@ -402,7 +406,7 @@
             // Grilla
             // 
             this.Grilla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Grilla.Location = new System.Drawing.Point(9, 69);
+            this.Grilla.Location = new System.Drawing.Point(6, 69);
             this.Grilla.Name = "Grilla";
             this.Grilla.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.Grilla.Size = new System.Drawing.Size(744, 130);
@@ -416,11 +420,12 @@
             this.label8.Size = new System.Drawing.Size(46, 16);
             this.label8.TabIndex = 20;
             this.label8.Text = "Fecha";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // btnEliminar
             // 
             this.btnEliminar.Image = global::Concesionaria.Properties.Resources.cancel;
-            this.btnEliminar.Location = new System.Drawing.Point(529, 14);
+            this.btnEliminar.Location = new System.Drawing.Point(527, 33);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(40, 28);
             this.btnEliminar.TabIndex = 23;
@@ -439,7 +444,7 @@
             // btnAgregarCosto
             // 
             this.btnAgregarCosto.Image = global::Concesionaria.Properties.Resources.add;
-            this.btnAgregarCosto.Location = new System.Drawing.Point(483, 13);
+            this.btnAgregarCosto.Location = new System.Drawing.Point(481, 35);
             this.btnAgregarCosto.Name = "btnAgregarCosto";
             this.btnAgregarCosto.Size = new System.Drawing.Size(40, 28);
             this.btnAgregarCosto.TabIndex = 22;
@@ -538,6 +543,25 @@
             this.btnAgregarGastodeRecepcion.UseVisualStyleBackColor = true;
             this.btnAgregarGastodeRecepcion.Click += new System.EventHandler(this.btnAgregarGastodeRecepcion_Click);
             // 
+            // cmbMoneda
+            // 
+            this.cmbMoneda.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMoneda.FormattingEnabled = true;
+            this.cmbMoneda.Location = new System.Drawing.Point(545, 12);
+            this.cmbMoneda.Name = "cmbMoneda";
+            this.cmbMoneda.Size = new System.Drawing.Size(117, 24);
+            this.cmbMoneda.TabIndex = 49;
+            this.cmbMoneda.SelectedIndexChanged += new System.EventHandler(this.cmbMoneda_SelectedIndexChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(481, 16);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(58, 16);
+            this.label10.TabIndex = 50;
+            this.label10.Text = "Moneda";
+            // 
             // FrmCosto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -613,5 +637,7 @@
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Button btnAgregarGastodeRecepcion;
         private System.Windows.Forms.DataGridView GrillaGastosRecepcion;
+        private System.Windows.Forms.ComboBox cmbMoneda;
+        private System.Windows.Forms.Label label10;
     }
 }

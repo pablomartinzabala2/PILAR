@@ -1100,6 +1100,7 @@
     <Content Include="Iconos\joselo.jpg" />
     <Content Include="Iconos\kfloppy_32x32-32.ico" />
     <Content Include="Iconos\llave.ico" />
+    <Content Include="Iconos\Logo\Logo.jpg" />
     <Content Include="Iconos\Mensaje.jpg" />
     <Content Include="Iconos\money_euro.ico" />
     <Content Include="Iconos\MOVIMIENTOS.ico" />

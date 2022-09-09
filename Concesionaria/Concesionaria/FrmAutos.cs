@@ -333,6 +333,10 @@ namespace Concesionaria
                         CodCliente = Convert.ToInt32(txtCodCLiente.Text);
                     if (chkSinRegistrarCliente.Checked == true)
                         CodCliente = cliente.GetcodClienteNulo();
+                    else
+                    {
+                        CodCliente = Convert.ToInt32(GrillaCliente.Rows[0].Cells[0].Value.ToString());
+                    }
                     double ImporteaPagar = fun.ToDouble(txtEfectivoaPagar.Text);
                     DateTime FechaImporteApgar = DateTime.Now;
                     int Cuota = 0;
